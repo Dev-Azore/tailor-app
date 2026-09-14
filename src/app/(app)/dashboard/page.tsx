@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { AdBanner } from '@/components/ads/AdBanner';
 
 export default function DashboardPage() {
   return (
@@ -52,6 +53,9 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      {/* Non-intrusive ad placement (FR-6.1 / FR-6.2) */}
+      <AdBanner />
     </div>
   );
 }

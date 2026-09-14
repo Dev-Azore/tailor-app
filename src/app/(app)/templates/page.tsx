@@ -15,6 +15,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { getTemplates, deleteTemplate } from './actions';
+import { AdBanner } from '@/components/ads/AdBanner';
 
 interface TemplateItem {
   id: string;
@@ -280,6 +281,9 @@ export default function TemplatesPage() {
           ))}
         </div>
       )}
+
+      {/* Non-intrusive ad placement (FR-6.1 / FR-6.2) */}
+      <AdBanner />
 
       {/* Delete Confirmation Modal */}
       {templateToDelete && (

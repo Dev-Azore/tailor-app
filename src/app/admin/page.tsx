@@ -1,0 +1,251 @@
+import { createClient } from '@/lib/supabase/server';
+import {
+  Users,
+  ShieldCheck,
+  Ban,
+  Ruler,
+  FolderGit2,
+  Calendar,
+  Layers,
+  ArrowUpRight,
+} from 'lucide-react';
+import { TailorStatusToggle } from '@/components/admin/TailorStatusToggle';
+
+interface TailorStatRow {
+  tailor_id: string;
+  name: string;
+  status: 'active' | 'suspended';
+  plan: 'free' | 'premium';
+  client_count: number;
+  template_count: number;
+  measurement_count: number;
+  last_activity: string | null;
+}
+
+export default async function AdminDashboardPage() {
+  const supabase = await createClient();
+
+  // Call the secure RPC function defined in migration (FR-5.2)
+  const { data: rawStats, error } = await supabase.rpc('admin_tailor_stats');
+
+  const stats = (rawStats || []) as TailorStatRow[];
+
+  // Compute platform-wide KPI aggregates
+  const totalTailors = stats.length;
+  const activeTailors = stats.filter((t) => t.status === 'active').length;
+  const suspendedTailors = stats.filter((t) => t.status === 'suspended').length;
+  const totalClients = stats.reduce((acc, t) => acc + Number(t.client_count || 0), 0);
+  const totalMeasurements = stats.reduce(
+    (acc, t) => acc + Number(t.measurement_count || 0),
+    0
+  );
+
+  return (
+    <div className="space-y-8">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
+          Admin Overview & Tailor Directory
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          Monitor platform activity, oversee tailor accounts, and manage system status.
+        </p>
+      </div>
+
+      {/* KPI Cards Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        {/* Card 1: Total Tailors */}
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400">Total Tailors</span>
+            <div className="w-7 h-7 rounded-xl bg-lime-400/10 text-lime-400 flex items-center justify-center">
+              <Users className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-slate-100">{totalTailors}</p>
+          <p className="text-[11px] text-slate-500">Registered SaaS users</p>
+        </div>
+
+        {/* Card 2: Active Accounts */}
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400">Active</span>
+            <div className="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <ShieldCheck className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-emerald-400">{activeTailors}</p>
+          <p className="text-[11px] text-slate-500">In good standing</p>
+        </div>
+
+        {/* Card 3: Suspended Accounts */}
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400">Suspended</span>
+            <div className="w-7 h-7 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center">
+              <Ban className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-red-400">{suspendedTailors}</p>
+          <p className="text-[11px] text-slate-500">Access disabled</p>
+        </div>
+
+        {/* Card 4: Total Clients */}
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400">Total Clients</span>
+            <div className="w-7 h-7 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+              <FolderGit2 className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-slate-100">{totalClients}</p>
+          <p className="text-[11px] text-slate-500">Across all tailors</p>
+        </div>
+
+        {/* Card 5: Total Measurements */}
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-2 col-span-2 sm:col-span-1">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400">Measurements</span>
+            <div className="w-7 h-7 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+              <Ruler className="w-3.5 h-3.5" />
+            </div>
+          </div>
+          <p className="text-2xl font-black text-slate-100">{totalMeasurements}</p>
+          <p className="text-[11px] text-slate-500">Immutable snapshots</p>
+        </div>
+      </div>
+
+      {/* Tailor Table Section */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden space-y-4 p-5 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-base font-bold text-slate-100">Registered Tailors</h2>
+            <p className="text-xs text-slate-400">
+              Live metrics and account status management for every tenant.
+            </p>
+          </div>
+
+          <span className="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg self-start sm:self-auto">
+            {stats.length} {stats.length === 1 ? 'Tailor' : 'Tailors'}
+          </span>
+        </div>
+
+        {error && (
+          <div className="p-4 bg-red-950/60 border border-red-800 rounded-xl text-xs text-red-200">
+            Failed to load tailor statistics: {error.message}
+          </div>
+        )}
+
+        {stats.length === 0 ? (
+          <div className="p-12 text-center bg-slate-950/50 border border-dashed border-slate-800 rounded-xl space-y-2">
+            <Users className="w-8 h-8 text-slate-600 mx-auto" />
+            <p className="text-sm font-semibold text-slate-300">No tailor accounts found</p>
+            <p className="text-xs text-slate-500">
+              When users register on the platform, their activity metrics will appear here.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto -mx-5 sm:mx-0">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px] font-bold">
+                  <th className="py-3 px-4">Tailor Name</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-3">Plan</th>
+                  <th className="py-3 px-3 text-center">Clients</th>
+                  <th className="py-3 px-3 text-center">Templates</th>
+                  <th className="py-3 px-3 text-center">Measurements</th>
+                  <th className="py-3 px-4">Last Activity</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {stats.map((tailor) => {
+                  const isSuspended = tailor.status === 'suspended';
+                  const formattedDate = tailor.last_activity
+                    ? new Date(tailor.last_activity).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })
+                    : 'No activity yet';
+
+                  return (
+                    <tr
+                      key={tailor.tailor_id}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
+                      {/* Name & ID */}
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-lime-400 shrink-0">
+                            {tailor.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-200">{tailor.name}</p>
+                            <p className="text-[10px] font-mono text-slate-500 truncate max-w-[120px] sm:max-w-[160px]">
+                              {tailor.tailor_id}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Status */}
+                      <td className="py-3.5 px-3">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${
+                            isSuspended
+                              ? 'bg-red-500/10 text-red-400 border-red-500/20'
+                              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                          }`}
+                        >
+                          {tailor.status}
+                        </span>
+                      </td>
+
+                      {/* Plan */}
+                      <td className="py-3.5 px-3">
+                        <span className="text-[11px] font-medium text-slate-300 capitalize px-2 py-0.5 bg-slate-800 rounded-md border border-slate-700">
+                          {tailor.plan}
+                        </span>
+                      </td>
+
+                      {/* Client Count */}
+                      <td className="py-3.5 px-3 text-center font-mono font-semibold text-slate-200">
+                        {tailor.client_count}
+                      </td>
+
+                      {/* Template Count */}
+                      <td className="py-3.5 px-3 text-center font-mono font-semibold text-slate-200">
+                        {tailor.template_count}
+                      </td>
+
+                      {/* Measurement Count */}
+                      <td className="py-3.5 px-3 text-center font-mono font-semibold text-lime-400">
+                        {tailor.measurement_count}
+                      </td>
+
+                      {/* Last Activity */}
+                      <td className="py-3.5 px-4 text-slate-400 text-[11px]">
+                        {formattedDate}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-3.5 px-4 text-right">
+                        <TailorStatusToggle
+                          tailorId={tailor.tailor_id}
+                          tailorName={tailor.name}
+                          currentStatus={tailor.status}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

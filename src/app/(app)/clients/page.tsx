@@ -16,6 +16,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { getClients, deleteClientAction } from './actions';
+import { AdBanner } from '@/components/ads/AdBanner';
 
 interface ClientItem {
   id: string;
@@ -288,6 +289,9 @@ export default function ClientsPage() {
           ))}
         </div>
       )}
+
+      {/* Non-intrusive ad placement (FR-6.1 / FR-6.2) */}
+      <AdBanner />
 
       {/* Delete Confirmation Modal */}
       {clientToDelete && (
