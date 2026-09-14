@@ -27,14 +27,14 @@ export function BottomNav() {
               key={href}
               href={href}
               className={`flex flex-col items-center gap-1 px-3 py-3 min-w-[56px] transition-colors ${
-                isActive ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'
+                isActive ? 'text-lime-400' : 'text-slate-500 hover:text-slate-300'
               }`}
               aria-label={label}
             >
               <Icon className={`w-5 h-5 transition-transform ${isActive ? 'scale-110' : ''}`} />
               <span className="text-[10px] font-medium leading-none">{label}</span>
               {isActive && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-amber-400 rounded-full" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-lime-400 rounded-full" />
               )}
             </Link>
           );

@@ -44,7 +44,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/25">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-900/40">
           <span className="text-2xl font-black text-white">T</span>
         </div>
         <h1 className="text-2xl font-bold text-white tracking-tight">TailorApp</h1>
@@ -101,7 +101,7 @@ export default function LoginPage() {
                   autoComplete="email"
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
                 />
               </div>
               {passwordErrors.email && (
@@ -123,7 +123,7 @@ export default function LoginPage() {
                   autoComplete="current-password"
                   required
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                  className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
                 />
                 <button
                   type="button"
@@ -143,7 +143,7 @@ export default function LoginPage() {
               id="login-submit"
               type="submit"
               disabled={isPending}
-              className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg text-sm hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 bg-lime-400 hover:bg-lime-300 text-brand-900 font-semibold rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-lime-400/20 flex items-center justify-center gap-2"
             >
               {passwordPending && <Loader2 className="w-4 h-4 animate-spin" />}
               Sign In
@@ -175,7 +175,7 @@ export default function LoginPage() {
                   autoComplete="email"
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
                 />
               </div>
               {magicErrors.email && (
@@ -187,7 +187,7 @@ export default function LoginPage() {
               id="magic-link-submit"
               type="submit"
               disabled={isPending}
-              className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg text-sm hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 bg-lime-400 hover:bg-lime-300 text-brand-900 font-semibold rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-lime-400/20 flex items-center justify-center gap-2"
             >
               {magicPending && <Loader2 className="w-4 h-4 animate-spin" />}
               Send Magic Link
@@ -197,7 +197,7 @@ export default function LoginPage() {
 
         <p className="mt-5 text-center text-sm text-slate-500">
           Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+          <Link href="/register" className="text-lime-400 hover:text-lime-300 font-medium transition-colors">
             Sign up
           </Link>
         </p>

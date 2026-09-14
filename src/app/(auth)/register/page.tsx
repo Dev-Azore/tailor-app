@@ -27,7 +27,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
       {/* Logo */}
       <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/25">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-900/40">
           <span className="text-2xl font-black text-white">T</span>
         </div>
         <h1 className="text-2xl font-bold text-white tracking-tight">TailorApp</h1>
@@ -57,7 +57,7 @@ export default function RegisterPage() {
                 autoComplete="name"
                 required
                 placeholder="Your name"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
               />
             </div>
             {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name[0]}</p>}
@@ -77,7 +77,7 @@ export default function RegisterPage() {
                 autoComplete="email"
                 required
                 placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
               />
             </div>
             {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email[0]}</p>}
@@ -97,7 +97,7 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 required
                 placeholder="Min. 8 characters"
-                className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
               />
               <button
                 type="button"
@@ -125,7 +125,7 @@ export default function RegisterPage() {
                 autoComplete="new-password"
                 required
                 placeholder="Repeat password"
-                className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition"
+                className="w-full pl-10 pr-10 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 transition"
               />
               <button
                 type="button"
@@ -145,7 +145,7 @@ export default function RegisterPage() {
             id="register-submit"
             type="submit"
             disabled={isPending}
-            className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg text-sm hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 bg-lime-400 hover:bg-lime-300 text-brand-900 font-semibold rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-lime-400/20 flex items-center justify-center gap-2"
           >
             {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
             Create Account
@@ -154,7 +154,7 @@ export default function RegisterPage() {
 
         <p className="mt-5 text-center text-sm text-slate-500">
           Already have an account?{' '}
-          <Link href="/login" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+          <Link href="/login" className="text-lime-400 hover:text-lime-300 font-medium transition-colors">
             Sign in
           </Link>
         </p>

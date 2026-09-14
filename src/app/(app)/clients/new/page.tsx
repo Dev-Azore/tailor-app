@@ -16,7 +16,7 @@ export default function NewClientPage() {
         </Link>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2">
-            <UserPlus className="w-6 h-6 text-amber-400" />
+            <UserPlus className="w-6 h-6 text-lime-400" />
             Register New Client
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">

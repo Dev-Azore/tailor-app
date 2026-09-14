@@ -65,7 +65,7 @@ export default function EditClientPage() {
         </Link>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2">
-            <Users className="w-6 h-6 text-amber-400" />
+            <Users className="w-6 h-6 text-lime-400" />
             Edit Client Information
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
@@ -76,7 +76,7 @@ export default function EditClientPage() {
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-16 text-slate-400 space-y-3">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-lime-400" />
           <p className="text-sm">Loading client data...</p>
         </div>
       )}

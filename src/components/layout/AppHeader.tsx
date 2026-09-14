@@ -14,12 +14,12 @@ export function AppHeader({ name, plan }: AppHeaderProps) {
       <div className="flex items-center justify-between px-4 h-14 max-w-2xl mx-auto">
         {/* Logo + Name */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow shadow-orange-500/25 flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow shadow-brand-900/30 flex-shrink-0">
             <span className="text-sm font-black text-white">T</span>
           </div>
           <span className="text-sm font-semibold text-slate-100 truncate max-w-[140px]">{name}</span>
           {plan === 'premium' && (
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-lime-400/15 text-lime-400 border border-lime-400/30">
               PRO
             </span>
           )}

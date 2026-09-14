@@ -34,7 +34,7 @@ export default function DashboardPage() {
         <div className="space-y-2">
           <Link
             href="/measurements/new"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium hover:from-amber-500/20 hover:to-orange-500/20 transition"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-lime-400/10 border border-lime-400/20 text-lime-400 text-sm font-medium hover:bg-lime-400/20 transition"
           >
             + Record a Measurement
           </Link>

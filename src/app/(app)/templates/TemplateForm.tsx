@@ -246,7 +246,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
       {/* Preset Quick Loader */}
       {!isEditing && (
         <div className="p-4 bg-slate-900/90 border border-slate-800/80 rounded-2xl space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-semibold text-lime-400 uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Quick Start Templates</span>
           </div>
@@ -271,7 +271,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           htmlFor="template-name"
           className="block text-sm font-medium text-slate-200"
         >
-          Template Name <span className="text-amber-400">*</span>
+          Template Name <span className="text-lime-400">*</span>
         </label>
         <input
           id="template-name"
@@ -279,7 +279,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g., Men’s 3-Piece Suit, Kaftan, Evening Gown"
-          className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-base"
+          className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 text-base"
           disabled={isSubmitting}
         />
         {fieldErrors.name && (
@@ -292,7 +292,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
         <div className="flex items-center justify-between px-1">
           <div>
             <h2 className="text-base font-semibold text-slate-100 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-amber-400" />
+              <Layers className="w-4 h-4 text-lime-400" />
               Measurement Fields ({fields.length})
             </h2>
             <p className="text-xs text-slate-400">
@@ -302,7 +302,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           <button
             type="button"
             onClick={handleAddField}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-medium transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-lime-400/10 hover:bg-lime-400/20 text-lime-300 border border-lime-400/30 rounded-lg text-xs font-medium transition cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             Add Field
@@ -349,7 +349,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                     handleFieldChange(index, 'field_name', e.target.value)
                   }
                   placeholder={`Field name (e.g., Chest, Waist)`}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
                   disabled={isSubmitting}
                 />
               </div>
@@ -361,7 +361,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                   onChange={(e) =>
                     handleFieldChange(index, 'unit', e.target.value)
                   }
-                  className="w-full px-2.5 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-2.5 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
                   disabled={isSubmitting}
                 >
                   <option value="in">Inches (in)</option>
@@ -410,7 +410,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 rounded-xl text-sm font-semibold shadow-lg shadow-amber-500/20 transition disabled:opacity-50 cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 bg-lime-400 hover:bg-lime-300 active:scale-95 text-brand-900 rounded-xl text-sm font-semibold shadow-lg shadow-lime-400/20 transition disabled:opacity-50 cursor-pointer"
         >
           {isSubmitting ? (
             <>

@@ -16,7 +16,7 @@ export default function NewTemplatePage() {
         </Link>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2">
-            <Ruler className="w-6 h-6 text-amber-400" />
+            <Ruler className="w-6 h-6 text-lime-400" />
             Create Measurement Template
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">

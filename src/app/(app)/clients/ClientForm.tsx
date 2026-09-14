@@ -113,7 +113,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
           htmlFor="client-name"
           className="block text-sm font-medium text-slate-200"
         >
-          Full Name <span className="text-amber-400">*</span>
+          Full Name <span className="text-lime-400">*</span>
         </label>
         <div className="relative">
           <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -123,7 +123,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Emmanuel Adeleke"
-            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-sm sm:text-base"
+            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 text-sm sm:text-base"
             disabled={isSubmitting}
           />
         </div>
@@ -148,7 +148,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="e.g., +234 801 234 5678"
-            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-sm sm:text-base"
+            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 text-sm sm:text-base"
             disabled={isSubmitting}
           />
         </div>
@@ -173,7 +173,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="e.g., Prefers slim fit, likes high-waist trousers, wedding order delivery in Nov."
-            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-sm"
+            className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 text-sm"
             disabled={isSubmitting}
           />
         </div>
@@ -198,12 +198,12 @@ export function ClientForm({ initialData }: ClientFormProps) {
             type="button"
             onClick={(e) => handleSubmit(e, 'measure')}
             disabled={isSubmitting}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 rounded-xl text-sm font-semibold transition cursor-pointer"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-lime-300 border border-lime-400/30 rounded-xl text-sm font-semibold transition cursor-pointer"
           >
             {isSubmitting && redirectAfterSave === 'measure' ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Ruler className="w-4 h-4 text-amber-400" />
+              <Ruler className="w-4 h-4 text-lime-400" />
             )}
             Save & Take Measurement
           </button>
@@ -212,7 +212,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 rounded-xl text-sm font-semibold shadow-lg shadow-amber-500/20 transition disabled:opacity-50 cursor-pointer"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-lime-400 hover:bg-lime-300 active:scale-95 text-brand-900 rounded-xl text-sm font-semibold shadow-lg shadow-lime-400/20 transition disabled:opacity-50 cursor-pointer"
         >
           {isSubmitting && redirectAfterSave === 'profile' ? (
             <>
