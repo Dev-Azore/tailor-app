@@ -144,7 +144,12 @@ export async function recordMeasurement(
     .single();
 
   if (insertError || !measurement) {
-    return { error: 'Failed to record measurement. Please check your connection and try again.' };
+    console.error('[Supabase measurements.insert error]:', insertError);
+    return {
+      error: insertError
+        ? `Failed to record measurement: ${insertError.message}`
+        : 'Failed to record measurement. Please try again.',
+    };
   }
 
   // 7. Revalidate relevant cache paths

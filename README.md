@@ -194,10 +194,17 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```
 tailor-app/
+├── .github/
+│   └── workflows/
+│       └── keep-alive.yml      # Daily Supabase free-tier keep-alive job
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── (auth)/             # Login, register routes
 │   │   ├── (app)/              # Tailor-facing routes (CSR)
+│   │   │   ├── dashboard/      # Dashboard page + stats action
+│   │   │   ├── clients/        # Client CRUD
+│   │   │   ├── templates/      # Template CRUD
+│   │   │   └── measurements/   # Measurement recording
 │   │   ├── admin/              # Admin routes (SSR)
 │   │   ├── layout.tsx
 │   │   └── globals.css
@@ -206,9 +213,10 @@ tailor-app/
 │   │   │   ├── client.ts       # Browser Supabase client
 │   │   │   ├── server.ts       # Server Supabase client
 │   │   │   └── middleware.ts   # Session refresh helper
-│   │   └── validation/         # Zod schemas
+│   │   ├── validation/         # Zod schemas
+│   │   └── hooks/              # React hooks (useUserPlan)
 │   ├── components/             # Shared UI components
-│   └── middleware.ts           # Next.js middleware entry
+│   └── middleware.ts           # Next.js middleware entry point
 ├── supabase/
 │   └── migrations/             # SQL migrations (never edit applied ones)
 ├── public/                     # Static assets, PWA icons, manifest
@@ -366,19 +374,20 @@ using the anon key in the `apikey` header. Store the key as a GitHub Actions sec
 ## Roadmap
 
 - [x] Initial schema and RLS policies
-- [ ] Supabase client plumbing (`client.ts`, `server.ts`, `middleware.ts`)
-- [ ] Auth flow (register, login, session refresh)
-- [ ] Zod schema layer
-- [ ] Template CRUD
-- [ ] Client CRUD
-- [ ] Measurement recording flow with snapshotting
-- [ ] Client measurement history view
-- [ ] Admin panel (tailor list, stats, suspend/reactivate)
-- [ ] AdSense integration with plan gating
+- [x] Supabase client plumbing (`client.ts`, `server.ts`, `middleware.ts`)
+- [x] Auth flow (register, login, magic-link, session refresh, logout)
+- [x] Zod schema layer (auth, client, template, measurement, admin)
+- [x] Template CRUD (create, update, soft-delete, list, get-by-id)
+- [x] Client CRUD (create, update, delete, list, profile + history)
+- [x] Measurement recording flow with server-side snapshotting
+- [x] Client measurement history view
+- [x] Admin panel (tailor list via RPC, stats, suspend/reactivate, audit log)
+- [x] AdSense integration with plan gating (`useUserPlan`)
+- [x] Dashboard stats RPC (`tailor_dashboard_stats`)
+- [x] Keep-alive job (`.github/workflows/keep-alive.yml`)
 - [ ] PWA installability (manifest, service worker, icons)
 - [ ] Connectivity / error-state handling
 - [ ] Version-check + update prompt
-- [ ] Keep-alive job
 - [ ] Premium ad-free tier
 
 ---

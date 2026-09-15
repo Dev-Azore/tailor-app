@@ -33,37 +33,53 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isAuthRoute = path.startsWith('/login') || path.startsWith('/register');
+
+  // Route classification
+  const isAuthRoute =
+    path.startsWith('/login') ||
+    path.startsWith('/register') ||
+    path.startsWith('/admin-login'); // admin entry point is a public auth page
   const isPublicRoute = isAuthRoute || path.startsWith('/suspended');
   const isAppRoute =
     path.startsWith('/dashboard') ||
     path.startsWith('/clients') ||
     path.startsWith('/templates') ||
     path.startsWith('/measurements');
-  const isAdminRoute = path.startsWith('/admin');
+  // /admin-login is excluded from the admin guard — it must remain publicly reachable
+  const isAdminRoute = path.startsWith('/admin') && !path.startsWith('/admin-login');
 
+  // Unauthenticated users: redirect to appropriate login page
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = isAdminRoute ? '/admin-login' : '/login';
     return NextResponse.redirect(url);
   }
 
   if (user) {
+    // Authenticated users visiting any auth/login page: redirect away
     if (isAuthRoute) {
-      const url = request.nextUrl.clone();
-      url.pathname = '/dashboard';
-      return NextResponse.redirect(url);
-    }
-
-    if (isAppRoute || isAdminRoute) {
-      // 1 query per request for role and status, per prompt §4.3
       const { data: profile } = await supabase
         .from('users')
         .select('role, status')
         .eq('id', user.id)
         .single();
 
-      if (profile?.status === 'suspended' && !request.nextUrl.pathname.startsWith('/suspended')) {
+      // Admins → admin console; tailors → dashboard
+      const destination = profile?.role === 'admin' ? '/admin' : '/dashboard';
+      const url = request.nextUrl.clone();
+      url.pathname = destination;
+      return NextResponse.redirect(url);
+    }
+
+    if (isAppRoute || isAdminRoute) {
+      // 1 query per request for role and status
+      const { data: profile } = await supabase
+        .from('users')
+        .select('role, status')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.status === 'suspended' && !path.startsWith('/suspended')) {
         const url = request.nextUrl.clone();
         url.pathname = '/suspended';
         return NextResponse.redirect(url);

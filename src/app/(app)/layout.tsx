@@ -18,19 +18,45 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('users')
     .select('name, plan, status')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
-  if (!profile || profile.status === 'suspended') {
+  // Self-heal: if handle_new_user trigger did not run, create the profile row
+  if (!profile) {
+    const defaultName =
+      user.user_metadata?.name || user.email?.split('@')[0] || 'Tailor';
+
+    const { data: newProfile, error: insertError } = await supabase
+      .from('users')
+      .insert({
+        id: user.id,
+        name: defaultName,
+        role: 'tailor',
+        plan: 'free',
+        status: 'active',
+      })
+      .select('name, plan, status')
+      .single();
+
+    if (!insertError && newProfile) {
+      profile = newProfile;
+    }
+  }
+
+  if (profile?.status === 'suspended') {
     redirect('/suspended');
   }
 
+  // Fallback in case DB query completely failed
+  const profileName = profile?.name ?? user.user_metadata?.name ?? 'Tailor';
+  const profilePlan = profile?.plan ?? 'free';
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      <AppHeader name={profile.name} plan={profile.plan} />
+      <AppHeader name={profileName} plan={profilePlan} />
       <main className="flex-1 pb-24 max-w-2xl w-full mx-auto px-4 pt-4">
         {children}
       </main>

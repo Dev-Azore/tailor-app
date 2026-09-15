@@ -277,6 +277,15 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      tailor_dashboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          client_count: number
+          template_count: number
+          measurement_count: number
+          last_activity: string | null
+        }[]
+      }
       ping_keep_alive: {
         Args: Record<PropertyKey, never>
         Returns: undefined

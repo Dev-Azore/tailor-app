@@ -40,7 +40,8 @@ export async function loginWithPassword(
   });
 
   if (error) {
-    return { error: 'Invalid email or password. Please try again.' };
+    console.error('[Supabase Auth] signInWithPassword error:', error);
+    return { error: `Login failed: ${error.message}` };
   }
 
   redirect('/dashboard');
@@ -108,10 +109,11 @@ export async function registerTailor(
   });
 
   if (error) {
+    console.error('[Supabase Auth] signUp error:', error.message);
     if (error.message.toLowerCase().includes('already registered')) {
       return { error: 'An account with that email already exists.' };
     }
-    return { error: 'Registration failed. Please try again.' };
+    return { error: `Registration failed: ${error.message}` };
   }
 
   redirect('/dashboard');

@@ -1,0 +1,38 @@
+name: Supabase Free-Tier Keep-Alive
+
+# Runs once daily at 08:00 UTC to prevent the Supabase free-tier project
+# from pausing after 7 days of database inactivity (NFR-8).
+# The ping_keep_alive() RPC performs a real write (truncate + insert) on the
+# keep_alive table, which resets the Supabase inactivity timer.
+#
+# Once organic traffic reliably exceeds one DB request per day, this job
+# can be disabled without any schema or code changes.
+on:
+  schedule:
+    - cron: '0 8 * * *'   # 08:00 UTC daily
+  workflow_dispatch:       # Allow manual trigger from the Actions UI
+
+jobs:
+  ping:
+    name: Ping keep_alive table
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Call ping_keep_alive RPC
+        run: |
+          HTTP_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" \
+            --request POST \
+            --header "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            --header "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            --header "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/ping_keep_alive")
+
+          echo "HTTP status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ne 200 ] && [ "$HTTP_STATUS" -ne 204 ]; then
+            echo "::error::Keep-alive ping failed with HTTP $HTTP_STATUS"
+            exit 1
+          fi
+
+          echo "Keep-alive ping succeeded."
