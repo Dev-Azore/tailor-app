@@ -91,7 +91,7 @@ export function PricingSection() {
 
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl sm:text-5xl font-black text-slate-400 font-mono">₦5,000</span>
-                <span className="text-slate-400 text-xs sm:text-sm font-medium">/ month</span>
+                <span className="text-slate-400 text-xs sm:text-sm font-medium">/ year</span>
               </div>
 
               {/* Feature List */}
