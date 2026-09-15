@@ -3,7 +3,7 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* ── Krystal Solutions Brand: Deep Navy Blue (#0B2545 / #071E3D) ── */
+  /* ── Deep Navy Blue ── */
   --color-brand-50:  #eef3f9;
   --color-brand-100: #d6e2f1;
   --color-brand-200: #b0c7e4;
@@ -12,24 +12,24 @@
   --color-brand-500: #2960a3;
   --color-brand-600: #1c4b85;
   --color-brand-700: #163c6c;
-  --color-brand-800: #0B2545;   /* Krystal deep primary navy */
-  --color-brand-900: #071A34;   /* Krystal dark rich navy */
-  --color-brand-950: #040e1e;   /* Krystal obsidian navy background */
+  --color-brand-800: #0B2545;
+  --color-brand-900: #071A34;
+  --color-brand-950: #040e1e;
 
-  /* ── Krystal Solutions Brand: Electric Lime Green (#76E000 / #84F200 / #90EE02) ── */
-  --color-lime-50:  #f4fee6;
-  --color-lime-100: #e6fec7;
-  --color-lime-200: #cdfd93;
-  --color-lime-300: #acfa54;
-  --color-lime-400: #84F200;    /* Krystal vibrant electric lime */
-  --color-lime-500: #76E000;    /* Krystal logo lime accent */
-  --color-lime-600: #57ab00;
-  --color-lime-700: #427f00;
-  --color-lime-800: #356407;
-  --color-lime-900: #2c530c;
-  --color-lime-950: #142e01;
+  /* ── Dark Rich Tailor Green Palette ── */
+  --color-lime-50:  #e8f5e9;
+  --color-lime-100: #c8e6c9;
+  --color-lime-200: #a5d6a7;
+  --color-lime-300: #81c784;
+  --color-lime-400: #2e7d32;
+  --color-lime-500: #1b5e20;
+  --color-lime-600: #144917;
+  --color-lime-700: #0e3310;
+  --color-lime-800: #09200a;
+  --color-lime-900: #040e05;
+  --color-lime-950: #020703;
 
-  /* ── Neutrals / Deep Slate ── */
+  /* ── Neutrals ── */
   --color-slate-50:  #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
@@ -43,69 +43,88 @@
   --color-slate-950: #020617;
 }
 
-/* Animations and 3D visual utilities */
+/* ── Animations ── */
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
-@keyframes pulseSlow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.05); }
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(0.5deg); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.04); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
 .animate-float {
-  animation: float 5s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
-.animate-pulse-slow {
-  animation: pulseSlow 8s ease-in-out infinite;
+.animate-float-slow {
+  animation: floatSlow 5.5s ease-in-out infinite;
 }
 
-/* Glassmorphism effects */
-.glass-panel {
-  background: rgba(7, 26, 52, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(132, 242, 0, 0.15);
+.animate-pulse-soft {
+  animation: pulseSoft 7s ease-in-out infinite;
 }
 
-.glass-panel-navy {
-  background: rgba(11, 37, 69, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
 }
 
-.glass-panel-gold {
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ── Custom Scrollbars ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #040e1e;
+}
+::-webkit-scrollbar-thumb {
+  background: #0B2545;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2e7d32;
+}
+
+/* ── Glass panels ── */
+.glass {
   background: rgba(7, 26, 52, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(132, 242, 0, 0.3);
-  box-shadow: 0 20px 50px rgba(4, 14, 30, 0.8), 0 0 30px rgba(132, 242, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(46, 125, 50, 0.2);
 }
 
-/* 3D Perspective Card */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.transform-3d {
-  transform-style: preserve-3d;
-}
-
-/* Mobile safe-area for bottom nav */
-.safe-area-pb {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* Smooth scrolling */
+/* ── Global defaults ── */
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Better text rendering */
 body {
   background-color: #040e1e;
   color: #f1f5f9;

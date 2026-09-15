@@ -20,6 +20,7 @@ import {
   Clock,
   Sparkles,
   Phone,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   getMeasurementWizardData,
@@ -27,6 +28,14 @@ import {
   ClientOption,
   TemplateOption,
 } from '../actions';
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase() || 'CL';
+}
 
 function MeasurementWizard() {
   const router = useRouter();
@@ -52,7 +61,6 @@ function MeasurementWizard() {
   // Step 2 Form Values
   const [takenAt, setTakenAt] = useState<string>(() => {
     const now = new Date();
-    // Format for datetime-local input: YYYY-MM-DDTHH:mm
     const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
       .toISOString()
       .slice(0, 16);
@@ -94,7 +102,7 @@ function MeasurementWizard() {
             setSelectedTemplateId(preselectedTemplateId);
           }
 
-          // If both were pre-selected, auto-advance to step 2 for convenience
+          // If both were pre-selected, auto-advance to step 2
           if (initialClientId && initialTemplateId) {
             setCurrentStep(2);
           }
@@ -208,7 +216,6 @@ function MeasurementWizard() {
         setSubmitError(res.error);
         setIsSubmitting(false);
       } else {
-        // Successfully saved immutable record -> navigate to client profile
         router.push(`/clients/${selectedClientId}`);
         router.refresh();
       }
@@ -221,8 +228,8 @@ function MeasurementWizard() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-slate-400 space-y-4 max-w-xl mx-auto">
-        <Loader2 className="w-10 h-10 animate-spin text-lime-400" />
-        <p className="text-sm font-medium">Loading measurement wizard...</p>
+        <Loader2 className="w-10 h-10 animate-spin text-[#81c784]" />
+        <p className="text-sm font-medium">Loading measurement studio...</p>
       </div>
     );
   }
@@ -248,50 +255,50 @@ function MeasurementWizard() {
   }
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-12">
+    <div className="space-y-6 max-w-3xl mx-auto pb-12 animate-fade-in-up">
       {/* Top Navigation & Stepper Header */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <Link
             href={selectedClientId ? `/clients/${selectedClientId}` : '/dashboard'}
-            className="inline-flex items-center gap-2 p-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 rounded-xl transition cursor-pointer text-xs"
+            className="inline-flex items-center gap-2 p-2 bg-[#071A34] border border-[#0B2545] hover:border-[#2e7d32]/50 text-slate-400 hover:text-white rounded-xl transition cursor-pointer text-xs"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{selectedClientId ? 'Back to Client' : 'Dashboard'}</span>
           </Link>
 
-          <span className="text-xs font-semibold px-2.5 py-1 bg-lime-400/10 border border-lime-400/20 text-lime-400 rounded-full">
+          <span className="text-xs font-bold px-3 py-1 bg-[#2e7d32]/20 border border-[#2e7d32]/35 text-[#81c784] rounded-full">
             Step {currentStep} of 3
           </span>
         </div>
 
-        {/* Wizard Progress Bar */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5">
+        {/* Wizard Stepper Progress Bar */}
+        <div className="bg-[#071A34] border border-[#0B2545] rounded-2xl p-4 sm:p-5">
           <div className="flex items-center justify-between relative">
             {/* Step 1 Pill */}
             <div
               onClick={() => setCurrentStep(1)}
-              className={`flex items-center gap-2 text-xs font-semibold transition cursor-pointer ${
-                currentStep >= 1 ? 'text-lime-400' : 'text-slate-500'
+              className={`flex items-center gap-2 text-xs font-bold transition cursor-pointer ${
+                currentStep >= 1 ? 'text-[#81c784]' : 'text-slate-500'
               }`}
             >
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
                   currentStep > 1
-                    ? 'bg-lime-400 text-slate-950 border-lime-400'
+                    ? 'bg-[#2e7d32] text-white border-[#2e7d32]'
                     : currentStep === 1
-                    ? 'bg-lime-400/20 text-lime-400 border-lime-400'
-                    : 'bg-slate-950 text-slate-600 border-slate-800'
+                    ? 'bg-[#2e7d32]/20 text-[#81c784] border-[#2e7d32]'
+                    : 'bg-[#040e1e] text-slate-600 border-[#0B2545]'
                 }`}
               >
                 {currentStep > 1 ? <Check className="w-4 h-4" /> : '1'}
               </div>
-              <span className="hidden sm:inline">Select</span>
+              <span className="hidden sm:inline">Select Client & Style</span>
             </div>
 
             <div
               className={`flex-1 h-0.5 mx-2 sm:mx-4 transition-colors ${
-                currentStep >= 2 ? 'bg-lime-400/60' : 'bg-slate-800'
+                currentStep >= 2 ? 'bg-[#2e7d32]' : 'bg-[#0B2545]'
               }`}
             />
 
@@ -300,29 +307,29 @@ function MeasurementWizard() {
               onClick={() => {
                 if (selectedClientId && selectedTemplateId) setCurrentStep(2);
               }}
-              className={`flex items-center gap-2 text-xs font-semibold transition ${
+              className={`flex items-center gap-2 text-xs font-bold transition ${
                 selectedClientId && selectedTemplateId
                   ? 'cursor-pointer'
                   : 'opacity-50 cursor-not-allowed'
-              } ${currentStep >= 2 ? 'text-lime-400' : 'text-slate-500'}`}
+              } ${currentStep >= 2 ? 'text-[#81c784]' : 'text-slate-500'}`}
             >
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
                   currentStep > 2
-                    ? 'bg-lime-400 text-slate-950 border-lime-400'
+                    ? 'bg-[#2e7d32] text-white border-[#2e7d32]'
                     : currentStep === 2
-                    ? 'bg-lime-400/20 text-lime-400 border-lime-400'
-                    : 'bg-slate-950 text-slate-600 border-slate-800'
+                    ? 'bg-[#2e7d32]/20 text-[#81c784] border-[#2e7d32]'
+                    : 'bg-[#040e1e] text-slate-600 border-[#0B2545]'
                 }`}
               >
                 {currentStep > 2 ? <Check className="w-4 h-4" /> : '2'}
               </div>
-              <span className="hidden sm:inline">Measure</span>
+              <span className="hidden sm:inline">Enter Measurements</span>
             </div>
 
             <div
               className={`flex-1 h-0.5 mx-2 sm:mx-4 transition-colors ${
-                currentStep === 3 ? 'bg-lime-400/60' : 'bg-slate-800'
+                currentStep === 3 ? 'bg-[#2e7d32]' : 'bg-[#0B2545]'
               }`}
             />
 
@@ -333,17 +340,17 @@ function MeasurementWizard() {
                   setCurrentStep(3);
                 }
               }}
-              className={`flex items-center gap-2 text-xs font-semibold transition ${
+              className={`flex items-center gap-2 text-xs font-bold transition ${
                 selectedClientId && selectedTemplateId && hasAtLeastOneFieldFilled
                   ? 'cursor-pointer'
                   : 'opacity-50 cursor-not-allowed'
-              } ${currentStep === 3 ? 'text-lime-400' : 'text-slate-500'}`}
+              } ${currentStep === 3 ? 'text-[#81c784]' : 'text-slate-500'}`}
             >
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
                   currentStep === 3
-                    ? 'bg-lime-400/20 text-lime-400 border-lime-400'
-                    : 'bg-slate-950 text-slate-600 border-slate-800'
+                    ? 'bg-[#2e7d32]/20 text-[#81c784] border-[#2e7d32]'
+                    : 'bg-[#040e1e] text-slate-600 border-[#0B2545]'
                 }`}
               >
                 3
@@ -354,38 +361,36 @@ function MeasurementWizard() {
         </div>
       </div>
 
-      {/* Global Submit/Validation Error */}
+      {/* Submit/Validation Error */}
       {submitError && (
-        <div className="p-4 bg-red-950/60 border border-red-800 rounded-2xl flex items-start gap-3 text-red-200">
+        <div className="p-4 bg-red-950/40 border border-red-800 rounded-2xl flex items-start gap-3 text-red-200">
           <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
           <div className="flex-1 text-sm font-medium">{submitError}</div>
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* STEP 1: SELECT CLIENT & TEMPLATE */}
-      {/* ========================================================================= */}
       {currentStep === 1 && (
         <div className="space-y-6">
           {/* Section 1: Choose Client */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+          <div className="bg-[#071A34] border border-[#0B2545] rounded-3xl p-5 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-lime-400/10 text-lime-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#2e7d32]/20 text-[#81c784] flex items-center justify-center">
                   <User className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-slate-100">1. Select Client</h2>
-                  <p className="text-xs text-slate-400">Who are you measuring today?</p>
+                  <h2 className="text-base font-bold text-white">1. Select Customer</h2>
+                  <p className="text-xs text-slate-400">Who are you fitting today?</p>
                 </div>
               </div>
 
               <Link
                 href="/clients/new"
-                className="inline-flex items-center gap-1.5 text-xs text-lime-400 hover:text-lime-300 font-semibold transition"
+                className="inline-flex items-center gap-1.5 text-xs text-[#81c784] hover:underline font-bold transition"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>New Client</span>
+                <span>Add New Customer</span>
               </Link>
             </div>
 
@@ -396,26 +401,26 @@ function MeasurementWizard() {
                 type="text"
                 value={clientSearchQuery}
                 onChange={(e) => setClientSearchQuery(e.target.value)}
-                placeholder="Search client by name or phone..."
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 focus:border-lime-400 focus:ring-1 focus:ring-lime-400 rounded-xl text-sm text-slate-100 placeholder-slate-500 outline-none transition"
+                placeholder="Search customer by name or phone..."
+                className="w-full pl-10 pr-4 py-2.5 bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-xl text-sm text-white placeholder-slate-500 outline-none transition"
               />
             </div>
 
             {/* Client List */}
             {clients.length === 0 ? (
-              <div className="p-6 text-center bg-slate-950/60 border border-dashed border-slate-800 rounded-xl space-y-3">
-                <p className="text-sm text-slate-400">No clients registered yet.</p>
+              <div className="p-6 text-center bg-[#040e1e] border border-dashed border-[#0B2545] rounded-2xl space-y-3">
+                <p className="text-sm text-slate-400">No customers registered yet.</p>
                 <Link
                   href="/clients/new"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-lime-400 hover:bg-lime-300 text-slate-950 font-semibold rounded-xl text-xs transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2e7d32] hover:bg-[#1b5e20] text-white font-bold rounded-xl text-xs transition"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Create First Client</span>
+                  <span>Create First Customer</span>
                 </Link>
               </div>
             ) : filteredClients.length === 0 ? (
-              <div className="p-4 text-center text-xs text-slate-400 bg-slate-950/40 rounded-xl">
-                No clients matching &ldquo;{clientSearchQuery}&rdquo;
+              <div className="p-4 text-center text-xs text-slate-400 bg-[#040e1e] rounded-xl">
+                No customers matching &ldquo;{clientSearchQuery}&rdquo;
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-60 overflow-y-auto pr-1">
@@ -431,27 +436,27 @@ function MeasurementWizard() {
                       }}
                       className={`flex items-center justify-between p-3 rounded-xl border text-left transition cursor-pointer ${
                         isSelected
-                          ? 'bg-lime-400/10 border-lime-400/60 text-slate-100 shadow-sm shadow-lime-400/10'
-                          : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700 text-slate-300'
+                          ? 'bg-[#2e7d32]/15 border-[#2e7d32] text-white shadow-sm shadow-[#2e7d32]/10'
+                          : 'bg-[#040e1e] border-[#0B2545] hover:border-slate-700 text-slate-300'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 font-mono ${
                             isSelected
-                              ? 'bg-lime-400 text-slate-950'
-                              : 'bg-slate-900 text-lime-400 border border-slate-800'
+                              ? 'bg-[#2e7d32] text-white'
+                              : 'bg-[#071A34] text-[#81c784] border border-[#0B2545]'
                           }`}
                         >
-                          {client.name.charAt(0).toUpperCase()}
+                          {getInitials(client.name)}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold truncate text-slate-200">
+                          <p className="text-sm font-bold truncate text-white">
                             {client.name}
                           </p>
                           {client.phone && (
                             <p className="text-xs text-slate-400 truncate flex items-center gap-1">
-                              <Phone className="w-3 h-3 text-slate-500" />
+                              <Phone className="w-3 h-3 text-[#2e7d32]" />
                               {client.phone}
                             </p>
                           )}
@@ -459,7 +464,7 @@ function MeasurementWizard() {
                       </div>
 
                       {isSelected && (
-                        <div className="w-5 h-5 rounded-full bg-lime-400 text-slate-950 flex items-center justify-center shrink-0 ml-2">
+                        <div className="w-5 h-5 rounded-full bg-[#2e7d32] text-white flex items-center justify-center shrink-0 ml-2">
                           <Check className="w-3.5 h-3.5" />
                         </div>
                       )}
@@ -471,23 +476,23 @@ function MeasurementWizard() {
           </div>
 
           {/* Section 2: Choose Template */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+          <div className="bg-[#071A34] border border-[#0B2545] rounded-3xl p-5 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-lime-400/10 text-lime-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#2e7d32]/20 text-[#81c784] flex items-center justify-center">
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-slate-100">2. Select Template</h2>
+                  <h2 className="text-base font-bold text-white">2. Select Garment Template</h2>
                   <p className="text-xs text-slate-400">
-                    Which garment pattern are you taking measurements for?
+                    Which garment style are you recording measurements for?
                   </p>
                 </div>
               </div>
 
               <Link
                 href="/templates/new"
-                className="inline-flex items-center gap-1.5 text-xs text-lime-400 hover:text-lime-300 font-semibold transition"
+                className="inline-flex items-center gap-1.5 text-xs text-[#81c784] hover:underline font-bold transition"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>New Template</span>
@@ -496,11 +501,11 @@ function MeasurementWizard() {
 
             {/* Template List */}
             {templates.length === 0 ? (
-              <div className="p-6 text-center bg-slate-950/60 border border-dashed border-slate-800 rounded-xl space-y-3">
+              <div className="p-6 text-center bg-[#040e1e] border border-dashed border-[#0B2545] rounded-2xl space-y-3">
                 <p className="text-sm text-slate-400">No measurement templates created yet.</p>
                 <Link
                   href="/templates/new"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-lime-400 hover:bg-lime-300 text-slate-950 font-semibold rounded-xl text-xs transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2e7d32] hover:bg-[#1b5e20] text-white font-bold rounded-xl text-xs transition"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Create First Template</span>
@@ -520,21 +525,21 @@ function MeasurementWizard() {
                       }}
                       className={`flex flex-col p-3.5 rounded-xl border text-left transition cursor-pointer space-y-2 ${
                         isSelected
-                          ? 'bg-lime-400/10 border-lime-400/60 text-slate-100 shadow-sm shadow-lime-400/10'
-                          : 'bg-slate-950/70 border-slate-800/80 hover:border-slate-700 text-slate-300'
+                          ? 'bg-[#2e7d32]/15 border-[#2e7d32] text-white shadow-sm shadow-[#2e7d32]/10'
+                          : 'bg-[#040e1e] border-[#0B2545] hover:border-slate-700 text-slate-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-sm text-slate-100">
+                        <span className="font-bold text-sm text-white">
                           {tpl.name}
                         </span>
                         {isSelected ? (
-                          <div className="w-5 h-5 rounded-full bg-lime-400 text-slate-950 flex items-center justify-center shrink-0">
+                          <div className="w-5 h-5 rounded-full bg-[#2e7d32] text-white flex items-center justify-center shrink-0">
                             <Check className="w-3.5 h-3.5" />
                           </div>
                         ) : (
-                          <span className="text-[11px] px-2 py-0.5 bg-slate-900 border border-slate-800 text-slate-400 rounded-full font-medium">
-                            {tpl.template_fields.length} {tpl.template_fields.length === 1 ? 'field' : 'fields'}
+                          <span className="text-[11px] px-2 py-0.5 bg-[#071A34] border border-[#0B2545] text-[#81c784] rounded-full font-medium">
+                            {tpl.template_fields.length} {tpl.template_fields.length === 1 ? 'point' : 'points'}
                           </span>
                         )}
                       </div>
@@ -544,7 +549,7 @@ function MeasurementWizard() {
                         {tpl.template_fields.slice(0, 4).map((f) => (
                           <span
                             key={f.id}
-                            className="text-[10px] px-1.5 py-0.5 bg-slate-900/90 text-slate-400 rounded-md border border-slate-800/80"
+                            className="text-[10px] px-1.5 py-0.5 bg-[#071A34] text-slate-300 rounded-md border border-[#0B2545]"
                           >
                             {f.field_name}
                           </span>
@@ -570,8 +575,8 @@ function MeasurementWizard() {
               onClick={handleStep1Next}
               className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition cursor-pointer ${
                 selectedClientId && selectedTemplateId
-                  ? 'bg-lime-400 hover:bg-lime-300 text-slate-950 shadow-lg shadow-lime-400/20 active:scale-95'
-                  : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                  ? 'bg-[#2e7d32] hover:bg-[#1b5e20] text-white shadow-lg shadow-[#2e7d32]/25 active:scale-95'
+                  : 'bg-[#071A34] text-slate-500 border border-[#0B2545] cursor-not-allowed'
               }`}
             >
               <span>Next: Enter Values</span>
@@ -581,25 +586,23 @@ function MeasurementWizard() {
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* STEP 2: ENTER MEASUREMENT VALUES */}
-      {/* ========================================================================= */}
       {currentStep === 2 && selectedTemplate && selectedClient && (
         <div className="space-y-6">
           {/* Active Context Banner */}
-          <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-[#071A34] border border-[#0B2545] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-lime-400/10 text-lime-400 border border-lime-400/20 flex items-center justify-center font-bold text-sm shrink-0">
-                {selectedClient.name.charAt(0).toUpperCase()}
+              <div className="w-10 h-10 rounded-xl bg-[#040e1e] text-[#81c784] border border-[#2e7d32]/40 flex items-center justify-center font-bold text-xs shrink-0 font-mono">
+                {getInitials(selectedClient.name)}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold text-slate-100">{selectedClient.name}</p>
+                  <p className="text-sm font-bold text-white">{selectedClient.name}</p>
                   <span className="text-slate-600">•</span>
-                  <p className="text-xs font-semibold text-lime-400">{selectedTemplate.name}</p>
+                  <p className="text-xs font-bold text-[#81c784]">{selectedTemplate.name}</p>
                 </div>
                 <p className="text-xs text-slate-400">
-                  {selectedTemplate.template_fields.length} predefined fitting fields
+                  {selectedTemplate.template_fields.length} measurement points to record
                 </p>
               </div>
             </div>
@@ -607,56 +610,53 @@ function MeasurementWizard() {
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
-              className="text-xs text-slate-400 hover:text-slate-200 underline font-medium self-start sm:self-auto cursor-pointer"
+              className="text-xs text-slate-400 hover:text-white underline font-medium self-start sm:self-auto cursor-pointer"
             >
-              Change client or template
+              Change customer or style
             </button>
           </div>
 
           {/* Date & Time Taken Input */}
-          <div className="p-4 sm:p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-lime-400" />
-              <span>Measurement Date & Time (Fitting Session)</span>
+          <div className="p-4 sm:p-5 bg-[#071A34] border border-[#0B2545] rounded-2xl space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#2e7d32]" />
+              <span>Fitting Date & Time</span>
             </label>
             <input
               type="datetime-local"
               value={takenAt}
               onChange={(e) => setTakenAt(e.target.value)}
-              className="w-full sm:w-72 px-3.5 py-2.5 bg-slate-950 border border-slate-800 focus:border-lime-400 focus:ring-1 focus:ring-lime-400 rounded-xl text-xs sm:text-sm text-slate-100 outline-none transition"
+              className="w-full sm:w-72 px-3.5 py-2.5 bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-xl text-xs sm:text-sm text-white outline-none transition font-medium"
             />
-            <p className="text-[11px] text-slate-500">
-              Defaults to current time. You can adjust this if recording a previous fitting.
-            </p>
           </div>
 
-          {/* Field Inputs Grid (NFR-5: Large touch-friendly inputs for fitting-room use) */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+          {/* Field Inputs Grid */}
+          <div className="bg-[#071A34] border border-[#0B2545] rounded-3xl p-5 sm:p-6 space-y-4">
             <div>
-              <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
-                <Ruler className="w-4 h-4 text-lime-400" />
-                <span>Garment Measurements</span>
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <Ruler className="w-4 h-4 text-[#81c784]" />
+                <span>Body Measurements</span>
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                Enter values in inches, centimeters, or fractions.
+                Enter size values in Inches or Centimeters.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
               {selectedTemplate.template_fields.map((field, idx) => {
                 const val = fieldValues[field.field_name] || '';
                 return (
                   <div
                     key={field.id}
-                    className="p-3.5 bg-slate-950/70 border border-slate-800/90 rounded-xl space-y-1.5 focus-within:border-lime-400/80 transition"
+                    className="p-3.5 bg-[#040e1e] border border-[#0B2545] focus-within:border-[#2e7d32] rounded-2xl space-y-1.5 transition"
                   >
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                        <span className="text-[10px] text-lime-400 font-mono">#{idx + 1}</span>
+                        <span className="text-[10px] text-[#81c784] font-mono">#{idx + 1}</span>
                         <span>{field.field_name}</span>
                       </label>
                       {field.unit && (
-                        <span className="text-[11px] font-semibold text-slate-400 px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-md">
+                        <span className="text-[11px] font-bold text-[#81c784] px-2 py-0.5 bg-[#071A34] border border-[#0B2545] rounded-md">
                           {field.unit}
                         </span>
                       )}
@@ -670,14 +670,14 @@ function MeasurementWizard() {
                         onChange={(e) =>
                           handleFieldValueChange(field.field_name, e.target.value)
                         }
-                        placeholder={field.unit ? `e.g. 40 ${field.unit}` : 'e.g. 40'}
-                        className="w-full text-base sm:text-lg font-mono font-semibold py-2.5 px-3 bg-slate-900 border border-slate-800 focus:border-lime-400 rounded-lg text-slate-100 placeholder-slate-600 outline-none transition"
+                        placeholder={field.unit ? `e.g. 40.5` : 'e.g. 40.5'}
+                        className="w-full text-base sm:text-lg font-mono font-bold py-2 px-3 bg-transparent border-0 text-white placeholder-slate-600 outline-none"
                       />
                       {val && (
                         <button
                           type="button"
                           onClick={() => handleFieldValueChange(field.field_name, '')}
-                          className="absolute right-2.5 text-xs text-slate-500 hover:text-slate-300 p-1 cursor-pointer"
+                          className="text-xs text-slate-500 hover:text-slate-300 p-1 cursor-pointer"
                           title="Clear field"
                         >
                           ✕
@@ -695,7 +695,7 @@ function MeasurementWizard() {
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-medium rounded-xl text-xs transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#071A34] hover:bg-[#0B2545] border border-[#0B2545] text-slate-300 font-medium rounded-xl text-xs transition cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Selection</span>
@@ -704,7 +704,7 @@ function MeasurementWizard() {
             <button
               type="button"
               onClick={handleStep2Next}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-lime-400 hover:bg-lime-300 active:scale-95 text-slate-950 font-bold rounded-xl text-sm shadow-lg shadow-lime-400/20 transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#2e7d32] hover:bg-[#1b5e20] active:scale-95 text-white font-bold rounded-xl text-sm shadow-lg shadow-[#2e7d32]/25 transition cursor-pointer"
             >
               <span>Review Measurement</span>
               <ChevronRight className="w-4 h-4" />
@@ -713,35 +713,33 @@ function MeasurementWizard() {
         </div>
       )}
 
-      {/* ========================================================================= */}
       {/* STEP 3: REVIEW & IMMUTABLE SAVE */}
-      {/* ========================================================================= */}
       {currentStep === 3 && selectedTemplate && selectedClient && (
         <div className="space-y-6">
           {/* Header */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4">
+          <div className="bg-[#071A34] border border-[#0B2545] rounded-3xl p-5 sm:p-6 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-lime-400/10 text-lime-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-[#2e7d32]/20 text-[#81c784] flex items-center justify-center">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-slate-100">
-                  3. Review Measurement Summary
+                <h2 className="text-base font-bold text-white">
+                  3. Review & Freeze Fitting Ticket
                 </h2>
                 <p className="text-xs text-slate-400">
-                  Please verify all values before writing the permanent record.
+                  Please verify all points before saving the permanent snapshot.
                 </p>
               </div>
             </div>
 
             {/* Context Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
-                <p className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                  <User className="w-3 h-3 text-lime-400" />
-                  Client
+              <div className="p-3.5 bg-[#040e1e] border border-[#0B2545] rounded-xl space-y-1">
+                <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1">
+                  <User className="w-3 h-3 text-[#81c784]" />
+                  Customer
                 </p>
-                <p className="text-sm font-bold text-slate-100 truncate">
+                <p className="text-sm font-bold text-white truncate">
                   {selectedClient.name}
                 </p>
                 {selectedClient.phone && (
@@ -749,26 +747,26 @@ function MeasurementWizard() {
                 )}
               </div>
 
-              <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
-                <p className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                  <Layers className="w-3 h-3 text-lime-400" />
-                  Template
+              <div className="p-3.5 bg-[#040e1e] border border-[#0B2545] rounded-xl space-y-1">
+                <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1">
+                  <Layers className="w-3 h-3 text-[#81c784]" />
+                  Style
                 </p>
-                <p className="text-sm font-bold text-slate-100 truncate">
+                <p className="text-sm font-bold text-white truncate">
                   {selectedTemplate.name}
                 </p>
                 <p className="text-xs text-slate-400">
-                  {selectedTemplate.template_fields.length} fields defined
+                  {selectedTemplate.template_fields.length} points defined
                 </p>
               </div>
 
-              <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
-                <p className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-lime-400" />
-                  Session Time
+              <div className="p-3.5 bg-[#040e1e] border border-[#0B2545] rounded-xl space-y-1">
+                <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-[#81c784]" />
+                  Session Date
                 </p>
-                <p className="text-sm font-bold text-slate-100 truncate">
-                  {takenAt ? new Date(takenAt).toLocaleDateString() : 'Now'}
+                <p className="text-sm font-bold text-white truncate">
+                  {takenAt ? new Date(takenAt).toLocaleDateString('en-GB') : 'Now'}
                 </p>
                 <p className="text-xs text-slate-400">
                   {takenAt ? new Date(takenAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
@@ -778,12 +776,12 @@ function MeasurementWizard() {
           </div>
 
           {/* Measurements Table Review */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-3">
-            <h3 className="text-sm font-bold text-slate-200">
+          <div className="bg-[#071A34] border border-[#0B2545] rounded-3xl p-5 sm:p-6 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Recorded Field Values (Snapshot Preview)
             </h3>
 
-            <div className="divide-y divide-slate-800/80 border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
+            <div className="divide-y divide-[#0B2545] border border-[#0B2545] rounded-2xl overflow-hidden bg-[#040e1e]">
               {selectedTemplate.template_fields.map((tf, index) => {
                 const val = fieldValues[tf.field_name] || '';
                 const hasValue = val.trim().length > 0;
@@ -796,15 +794,15 @@ function MeasurementWizard() {
                       <span className="text-[11px] font-mono text-slate-500 w-5">
                         {index + 1}.
                       </span>
-                      <span className="font-semibold text-slate-200">{tf.field_name}</span>
+                      <span className="font-bold text-white">{tf.field_name}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
                       {hasValue ? (
-                        <div className="flex items-center gap-1.5 font-mono font-bold text-lime-400 bg-lime-400/10 px-3 py-1 rounded-lg border border-lime-400/20">
+                        <div className="flex items-center gap-1.5 font-mono font-black text-[#81c784] bg-[#2e7d32]/15 px-3 py-1 rounded-lg border border-[#2e7d32]/35">
                           <span>{val}</span>
                           {tf.unit && (
-                            <span className="text-xs font-normal text-lime-400/80">
+                            <span className="text-xs font-normal text-[#81c784]">
                               {tf.unit}
                             </span>
                           )}
@@ -819,14 +817,13 @@ function MeasurementWizard() {
             </div>
           </div>
 
-          {/* Immutability & Snapshot Notice (DR-2 / NFR-4 / §3.7) */}
-          <div className="p-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-start gap-3">
-            <Lock className="w-4 h-4 text-lime-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-slate-400 leading-relaxed">
-              <strong className="text-slate-200">Historical Snapshot Guarantee:</strong> Saving this
-              record creates a permanent snapshot in <strong className="text-slate-200">{selectedClient.name}</strong>&rsquo;s
-              profile. It will preserve these exact values forever, even if the template is edited
-              or deleted in the future.
+          {/* Immutability & Snapshot Notice */}
+          <div className="p-4 bg-[#071A34] border border-[#0B2545] rounded-2xl flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-[#81c784] shrink-0 mt-0.5" />
+            <p className="text-xs text-slate-300 leading-relaxed">
+              <strong className="text-white">Permanent Historical Snapshot:</strong> Saving this
+              record creates a permanent snapshot in <strong className="text-white">{selectedClient.name}</strong>&rsquo;s
+              fitting history. It will preserve these exact measurements forever with zero chance of loss.
             </p>
           </div>
 
@@ -836,7 +833,7 @@ function MeasurementWizard() {
               type="button"
               disabled={isSubmitting}
               onClick={() => setCurrentStep(2)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-medium rounded-xl text-xs transition cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#071A34] hover:bg-[#0B2545] border border-[#0B2545] text-slate-300 font-medium rounded-xl text-xs transition cursor-pointer disabled:opacity-50"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Edit Values</span>
@@ -846,17 +843,17 @@ function MeasurementWizard() {
               type="button"
               disabled={isSubmitting}
               onClick={handleSaveMeasurement}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-lime-400 hover:bg-lime-300 active:scale-95 text-slate-950 font-bold rounded-xl text-sm shadow-lg shadow-lime-400/20 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2e7d32] hover:bg-[#1b5e20] active:scale-95 text-white font-bold rounded-xl text-sm shadow-xl shadow-[#2e7d32]/30 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
                   <span>Saving Snapshot...</span>
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4" />
-                  <span>Save & Record Measurement</span>
+                  <span>Save & Freeze Measurement</span>
                 </>
               )}
             </button>
@@ -872,7 +869,7 @@ export default function MeasurementNewPage() {
     <Suspense
       fallback={
         <div className="flex flex-col items-center justify-center py-24 text-slate-400 space-y-4 max-w-xl mx-auto">
-          <Loader2 className="w-10 h-10 animate-spin text-lime-400" />
+          <Loader2 className="w-10 h-10 animate-spin text-[#81c784]" />
           <p className="text-sm font-medium">Loading measurement wizard...</p>
         </div>
       }

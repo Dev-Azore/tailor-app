@@ -1,5 +1,10 @@
 import { getDashboardStats } from './actions';
-import { DashboardClient } from './DashboardClient';
+import DashboardClient from './DashboardClient';
+
+export const metadata = {
+  title: 'Tailor Dashboard — TailorApp',
+  description: 'Search clients, view fittings, and manage garment measurements.',
+};
 
 /**
  * Server Component: fetches stats on the server, then passes them down
@@ -10,3 +15,4 @@ export default async function DashboardPage() {
 
   return <DashboardClient stats={stats} statsError={error} />;
 }
+

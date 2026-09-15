@@ -7,6 +7,7 @@ import {
   Check,
   Sparkles,
   ShieldCheck,
+  RefreshCw,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -22,29 +23,29 @@ interface PresetData {
 
 const NIGERIAN_PRESETS: Record<GarmentPreset, PresetData> = {
   kaftan_male: {
-    title: 'Kano Royal Kaftan (Male)',
-    category: 'Traditional Northern Menswear',
-    description: 'Precision measurement blueprint for high-collar Kaftans, custom shirt length, hand sleeve, and sokoto trousers.',
-    defaultClient: 'Mallam Ibrahim Shehu (Kano)',
+    title: 'Royal Kaftan (Male)',
+    category: 'Northern Menswear',
+    description: 'Standard measurement for Kaftans, custom shirt length, chest, sleeves, and trousers (Sokoto).',
+    defaultClient: 'Faisal Abubakar',
     fields: [
       { name: 'Tsawon Riga (Shirt Length)', defaultVal: '38.0', placeholder: '38.0' },
       { name: 'Fadin Kafada (Shoulder)', defaultVal: '18.5', placeholder: '18.5' },
       { name: 'Kirji (Chest)', defaultVal: '41.0', placeholder: '41.0' },
       { name: 'Tsawon Hannu (Sleeve Length)', defaultVal: '25.0', placeholder: '25.0' },
       { name: 'Kewaye Wando (Trouser Waist)', defaultVal: '34.0', placeholder: '34.0' },
-      { name: 'Tsawon Wando (Trouser Outseam)', defaultVal: '41.5', placeholder: '41.5' },
+      { name: 'Tsawon Wando (Trouser Length)', defaultVal: '41.5', placeholder: '41.5' },
       { name: 'Cinye (Thigh Width)', defaultVal: '26.0', placeholder: '26.0' },
       { name: 'Kafar Wando (Ankle Width)', defaultVal: '14.5', placeholder: '14.5' },
     ],
   },
   babban_riga: {
-    title: 'Babban Riga & Buba Set',
-    category: 'Ceremonial Northern Attire',
-    description: 'Full 3-piece traditional attire: Outer Babban Riga robe, Inner Buba shirt, and Sokoto.',
-    defaultClient: 'Alhaji Bashir Dangote (Nasarawa, Kano)',
+    title: 'Babban Riga 3-Piece Set',
+    category: 'Traditional Menswear',
+    description: 'Complete 3-piece traditional wear: Outer Babban Riga robe, Inner Buba shirt, and Sokoto trousers.',
+    defaultClient: 'Umar Rufa\'i',
     fields: [
       { name: 'Tsawon Babban Riga (Robe Length)', defaultVal: '58.0', placeholder: '58.0' },
-      { name: 'Fadin Hannu (Wing Span Wrist-to-Wrist)', defaultVal: '65.0', placeholder: '65.0' },
+      { name: 'Fadin Hannu (Wing Span)', defaultVal: '65.0', placeholder: '65.0' },
       { name: 'Kirjin Buba (Inner Shirt Chest)', defaultVal: '44.0', placeholder: '44.0' },
       { name: 'Tsawon Buba (Inner Shirt Length)', defaultVal: '38.0', placeholder: '38.0' },
       { name: 'Tsawon Wando (Trouser Length)', defaultVal: '42.0', placeholder: '42.0' },
@@ -53,31 +54,31 @@ const NIGERIAN_PRESETS: Record<GarmentPreset, PresetData> = {
   },
   senator: {
     title: 'Executive Senator Wear (Male)',
-    category: 'Contemporary Nigerian Menswear',
-    description: 'Sleek executive 2-piece fitted suit cut with structured neckline and matching slim-fit trousers.',
-    defaultClient: 'Usman Farouk (Fagge, Kano)',
+    category: 'Men\'s Suit & Wear',
+    description: '2-piece executive fitted suit with clean neckline and matching trousers.',
+    defaultClient: 'Usman Farouk',
     fields: [
-      { name: 'Top Length', defaultVal: '36.5', placeholder: '36.5' },
-      { name: 'Shoulder Width', defaultVal: '18.0', placeholder: '18.0' },
-      { name: 'Chest Circumference', defaultVal: '40.5', placeholder: '40.5' },
-      { name: 'Short Sleeve / Long Sleeve', defaultVal: '10.5', placeholder: '10.5' },
-      { name: 'Trouser Waist', defaultVal: '33.0', placeholder: '33.0' },
-      { name: 'Trouser Length', defaultVal: '40.0', placeholder: '40.0' },
+      { name: 'Top Length (Tsawon Riga)', defaultVal: '36.5', placeholder: '36.5' },
+      { name: 'Shoulder Width (Kafada)', defaultVal: '18.0', placeholder: '18.0' },
+      { name: 'Chest (Kirji)', defaultVal: '40.5', placeholder: '40.5' },
+      { name: 'Sleeve Length (Hannu)', defaultVal: '10.5', placeholder: '10.5' },
+      { name: 'Trouser Waist (Kugun Wando)', defaultVal: '33.0', placeholder: '33.0' },
+      { name: 'Trouser Length (Tsawon Wando)', defaultVal: '40.0', placeholder: '40.0' },
     ],
   },
   female_gown: {
-    title: 'Northern Female Gown / Abaya / Skirt (Female)',
-    category: 'Northern Womenswear & Couture',
-    description: 'Precision contours for Northern female Abayas, fitted gowns, corset seams, and 6-piece skirt cuts.',
-    defaultClient: 'Hajiya Fatima Bello (Tarauni, Kano)',
+    title: 'Female Gown / Abaya / Skirt (Female)',
+    category: 'Womenswear & Gowns',
+    description: 'Fittings for Abayas, fitted gowns, corset seams, and 6-piece skirts.',
+    defaultClient: 'Hajiya Fatima Bello',
     fields: [
-      { name: 'Bust Circumference', defaultVal: '37.0', placeholder: '37.0' },
-      { name: 'Underbust', defaultVal: '30.5', placeholder: '30.5' },
-      { name: 'Kunkuru / Waist', defaultVal: '29.0', placeholder: '29.0' },
-      { name: 'Kugu / Full Hip', defaultVal: '42.0', placeholder: '42.0' },
-      { name: 'Tsawon Riga / Abaya Length', defaultVal: '59.0', placeholder: '59.0' },
-      { name: 'Tsawon Siket (Skirt Length)', defaultVal: '43.0', placeholder: '43.0' },
-      { name: 'Hannu (Sleeve Length)', defaultVal: '24.0', placeholder: '24.0' },
+      { name: 'Bust Circumference (Kirji)', defaultVal: '37.0', placeholder: '37.0' },
+      { name: 'Underbust (Karkashin Kirji)', defaultVal: '30.5', placeholder: '30.5' },
+      { name: 'Waist (Kunkuru)', defaultVal: '29.0', placeholder: '29.0' },
+      { name: 'Full Hip (Kugu)', defaultVal: '42.0', placeholder: '42.0' },
+      { name: 'Abaya Length (Tsawon Riga)', defaultVal: '59.0', placeholder: '59.0' },
+      { name: 'Skirt Length (Tsawon Siket)', defaultVal: '43.0', placeholder: '43.0' },
+      { name: 'Sleeve Length (Hannu)', defaultVal: '24.0', placeholder: '24.0' },
     ],
   },
 };
@@ -121,202 +122,196 @@ export function InteractiveDemo() {
   const current = NIGERIAN_PRESETS[activePreset];
 
   return (
-    <section id="demo" className="py-24 relative overflow-hidden bg-[#040e1e] border-y border-[#0B2545]">
+    <section id="demo" className="py-20 sm:py-24 relative overflow-hidden bg-[#040e1e] border-y border-[#0B2545]">
       {/* Ambient background glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-[#0B2545]/40 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[400px] h-[400px] bg-[#84F200]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-[#0B2545]/40 rounded-full blur-[100px] sm:blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 right-4 sm:right-10 -translate-y-1/2 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-[#2e7d32]/15 rounded-full blur-[90px] sm:blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#071A34] border border-[#84F200]/30 text-[#84F200] text-xs font-black uppercase tracking-wider">
+        <div className="text-center max-w-3xl mx-auto space-y-3.5 mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#071A34] border border-[#2e7d32]/40 text-[#81c784] text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
-            Interactive Studio Test (Kano State & Nigerian Cuts)
+            Interactive Studio (Kaftan, Babban Riga & Gowns)
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Try Taking a Nigerian Measurement Now
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+            Try Taking a Measurement Now
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg">
-            Test how effortlessly you can take male and female measurements for Kaftan, Babban Riga, Senator, and Gowns with millimeter precision.
+          <p className="text-slate-300 text-sm sm:text-base lg:text-lg">
+            See how easy it is to enter and save customer measurements for traditional male and female clothes.
           </p>
         </div>
 
         {/* Preset Selector Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
           {(
             [
-              { key: 'kaftan_male', label: 'Kano Kaftan (Male)' },
+              { key: 'kaftan_male', label: 'Royal Kaftan' },
               { key: 'babban_riga', label: 'Babban Riga 3-Piece' },
-              { key: 'senator', label: 'Senator Wear (Male)' },
-              { key: 'female_gown', label: 'Gown / Abaya (Female)' },
+              { key: 'senator', label: 'Senator Wear' },
+              { key: 'female_gown', label: 'Female Gown / Abaya' },
             ] as const
-          ).map((item) => (
-            <button
-              key={item.key}
-              onClick={() => handlePresetChange(item.key)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-black transition-all duration-200 cursor-pointer ${
-                activePreset === item.key
-                  ? 'bg-[#84F200] text-[#071A34] shadow-lg shadow-[#84F200]/25 scale-105'
-                  : 'bg-[#071A34] border border-[#0B2545] text-slate-300 hover:text-white hover:border-[#84F200]/40'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
+          ).map((item) => {
+            const isActive = activePreset === item.key;
+            return (
+              <button
+                key={item.key}
+                onClick={() => handlePresetChange(item.key)}
+                className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  isActive
+                    ? 'bg-[#2e7d32] text-white shadow-lg shadow-[#2e7d32]/30 scale-105'
+                    : 'bg-[#071A34] text-slate-300 hover:text-white hover:bg-[#0B2545] border border-[#0B2545]'
+                }`}
+              >
+                <Scissors className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#81c784]'}`} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Main Interactive Studio Box */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto">
-          {/* Left: Input Form Studio */}
-          <div className="lg:col-span-7 bg-[#071A34] p-6 sm:p-8 rounded-3xl border-2 border-[#84F200]/30 shadow-2xl shadow-[#040e1e] space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#0B2545]">
-              <div>
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#84F200]">
+        {/* Interactive Workspace Box */}
+        <div className="max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-[#071A34] border border-[#2e7d32]/40 shadow-2xl p-5 sm:p-8 relative overflow-hidden">
+          {/* Header of the test ticket */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#0B2545]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-md bg-[#0B2545] text-[#81c784] text-[11px] font-bold uppercase tracking-wider">
                   {current.category}
                 </span>
-                <h3 className="text-xl font-black text-white">{current.title}</h3>
+                <span className="text-xs text-slate-400">Sample Template</span>
               </div>
-
-              {/* Unit Switcher */}
-              <div className="flex items-center gap-1 bg-[#040e1e] border border-[#0B2545] p-1 rounded-xl self-start sm:self-auto">
-                <button
-                  onClick={() => setUnit('in')}
-                  className={`px-3 py-1 rounded-lg text-xs font-black transition ${
-                    unit === 'in' ? 'bg-[#84F200] text-[#071A34] shadow' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Inches
-                </button>
-                <button
-                  onClick={() => setUnit('cm')}
-                  className={`px-3 py-1 rounded-lg text-xs font-black transition ${
-                    unit === 'cm' ? 'bg-[#84F200] text-[#071A34] shadow' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Centimeters
-                </button>
-              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white">{current.title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300">{current.description}</p>
             </div>
 
-            {/* Client name input field */}
-            <div>
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-2">
-                Client Name & Location
+            {/* Unit toggle */}
+            <div className="flex items-center self-start sm:self-center gap-1.5 p-1 bg-[#040e1e] rounded-xl border border-[#0B2545]">
+              <button
+                onClick={() => setUnit('in')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  unit === 'in'
+                    ? 'bg-[#2e7d32] text-white shadow'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Inches (in)
+              </button>
+              <button
+                onClick={() => setUnit('cm')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  unit === 'cm'
+                    ? 'bg-[#2e7d32] text-white shadow'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Centimeters (cm)
+              </button>
+            </div>
+          </div>
+
+          {/* Customer name input row */}
+          <div className="py-5 border-b border-[#0B2545] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Customer Name / Phone:
               </label>
               <input
                 type="text"
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#040e1e] border border-[#0B2545] rounded-xl text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-[#84F200] transition"
+                className="w-full sm:max-w-md bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-xl px-4 py-2.5 text-sm text-white font-medium focus:outline-none transition"
+                placeholder="Enter customer name..."
               />
             </div>
-
-            {/* Fields Grid */}
-            <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-slate-300">
-                Measurement Fields ({current.fields.length})
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {current.fields.map((f, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 bg-[#040e1e] border border-[#0B2545] rounded-xl flex items-center justify-between gap-3 focus-within:border-[#84F200]/60 transition"
-                  >
-                    <span className="text-xs font-medium text-slate-200 truncate">
-                      {f.name}
-                    </span>
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <input
-                        type="text"
-                        value={fieldValues[f.name] ?? ''}
-                        onChange={(e) => handleFieldChange(f.name, e.target.value)}
-                        placeholder={f.placeholder}
-                        className="w-16 px-2 py-1 bg-[#071A34] border border-[#0B2545] rounded-md text-sm font-mono font-black text-[#84F200] text-right focus:outline-none focus:border-[#84F200]"
-                      />
-                      <span className="text-xs text-slate-400 font-bold">{unit}</span>
-                    </div>
-                  </div>
-                ))}
+            <div className="text-left sm:text-right text-xs text-slate-400 space-y-0.5">
+              <div>Date: <span className="text-slate-200 font-semibold">{new Date().toLocaleDateString('en-GB')}</span></div>
+              <div className="text-[#81c784] font-medium flex items-center gap-1 sm:justify-end">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Private & Secured</span>
               </div>
             </div>
+          </div>
 
-            {/* Action Bar */}
-            <div className="pt-4 flex flex-col sm:flex-row items-center gap-3">
+          {/* Live Inputs Grid */}
+          <div className="py-6">
+            <div className="text-xs font-bold uppercase tracking-wider text-[#81c784] mb-4 flex items-center gap-2">
+              <span>Measurement Fields</span>
+              <span className="text-slate-400 font-normal">({current.fields.length} points)</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4">
+              {current.fields.map((field, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#040e1e] border border-[#0B2545] focus-within:border-[#2e7d32] rounded-2xl p-3.5 transition-all"
+                >
+                  <label className="block text-xs font-semibold text-slate-300 mb-1 truncate" title={field.name}>
+                    {field.name}
+                  </label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <input
+                      type="text"
+                      value={fieldValues[field.name] ?? ''}
+                      onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                      className="w-full bg-transparent text-lg font-black text-white font-mono focus:outline-none placeholder-slate-600"
+                      placeholder={field.placeholder}
+                    />
+                    <span className="text-xs text-[#81c784] font-bold font-mono">
+                      {unit}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Actions */}
+          <div className="pt-6 border-t border-[#0B2545] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-xs text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-[#2e7d32]" />
+              <span>Permanent record saved with zero chance of loss.</span>
+            </div>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
               <Button
-                size="lg"
                 onClick={handleSimulateSave}
-                className="w-full sm:flex-1 gap-2 bg-[#84F200] hover:bg-[#76E000] text-[#071A34] font-black shadow-xl shadow-[#84F200]/25 cursor-pointer"
+                disabled={isSaved}
+                className={`w-full sm:w-auto gap-2 text-sm font-bold transition-all ${
+                  isSaved
+                    ? 'bg-[#2e7d32] text-white'
+                    : 'bg-[#2e7d32] hover:bg-[#1b5e20] text-white shadow-lg shadow-[#2e7d32]/25'
+                }`}
               >
                 {isSaved ? (
                   <>
-                    <Check className="w-5 h-5 text-[#071A34]" />
-                    <span>Snapshot Saved to Cloud!</span>
+                    <Check className="w-4 h-4 text-white" />
+                    <span>Saved to Client History!</span>
                   </>
                 ) : (
                   <>
-                    <Scissors className="w-4 h-4 text-[#071A34]" />
-                    <span>Save Immutable Snapshot</span>
+                    <RefreshCw className="w-4 h-4" />
+                    <span>Test Save Measurement</span>
                   </>
                 )}
               </Button>
             </div>
           </div>
 
-          {/* Right: Live Simulated Output Snapshot Card */}
-          <div className="lg:col-span-5 space-y-5">
-            <div className="bg-[#071A34] p-6 rounded-3xl border border-[#84F200]/30 shadow-2xl relative">
-              <div className="flex items-center justify-between pb-4 border-b border-[#0B2545]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-3 h-3 rounded-full bg-[#84F200] animate-pulse" />
-                  <span className="text-xs font-black uppercase tracking-wider text-slate-200">
-                    Kano Studio Ticket
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-[#84F200] bg-[#84F200]/10 px-2 py-0.5 rounded border border-[#84F200]/30">
-                  {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          {/* Success Alert */}
+          {isSaved && (
+            <div className="mt-4 p-4 rounded-xl bg-[#2e7d32]/20 border border-[#2e7d32] flex items-center justify-between gap-3 text-xs text-white animate-fade-in-up">
+              <div className="flex items-center gap-2.5">
+                <Check className="w-4 h-4 text-[#81c784]" />
+                <span>
+                  <strong>Success:</strong> Saved ticket for <strong>{clientName}</strong> under {current.title}. In the real app, this is permanently saved to your cloud account!
                 </span>
               </div>
-
-              <div className="py-4 space-y-1">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold">Client Record</span>
-                <h4 className="text-lg font-black text-white">{clientName || 'Untitled Client'}</h4>
-                <p className="text-xs text-[#84F200] font-semibold">{current.title}</p>
-              </div>
-
-              {/* Snapshot data view */}
-              <div className="bg-[#040e1e] rounded-2xl p-4 border border-[#0B2545] max-h-[220px] overflow-y-auto space-y-2">
-                {current.fields.map((f, i) => (
-                  <div key={i} className="flex items-center justify-between text-xs py-1 border-b border-[#071A34] last:border-0">
-                    <span className="text-slate-300 truncate">{f.name}</span>
-                    <span className="font-mono font-bold text-[#84F200] flex-shrink-0">
-                      {fieldValues[f.name] || '-'} {unit}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 pt-3 flex items-center justify-between text-[11px] text-slate-400 border-t border-[#0B2545]">
-                <div className="flex items-center gap-1 text-[#84F200] font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Snapshot is Permanent & Immutable</span>
-                </div>
-                <span className="text-slate-400">Kano Hub</span>
-              </div>
-            </div>
-
-            {/* Quick CTA card */}
-            <div className="p-5 rounded-2xl bg-[#0B2545] border border-[#84F200]/20 text-sm text-slate-300 flex items-center justify-between gap-4">
-              <div>
-                <p className="font-bold text-white text-xs sm:text-sm">Ready to digitize your tailoring?</p>
-                <p className="text-xs text-slate-300">Join leading tailors in Kano & Nigeria.</p>
-              </div>
-              <Link href="/register">
-                <Button size="sm" className="bg-[#84F200] text-[#071A34] font-black hover:bg-[#76E000] flex-shrink-0">
-                  Sign Up Free
-                </Button>
+              <Link href="/register" className="text-[#81c784] underline font-bold hover:text-white whitespace-nowrap">
+                Create Free Account &rarr;
               </Link>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

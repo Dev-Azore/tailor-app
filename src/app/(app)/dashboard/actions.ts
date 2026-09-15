@@ -2,11 +2,25 @@
 
 import { createClient } from '@/lib/supabase/server';
 
+export interface DashboardClientItem {
+  id: string;
+  name: string;
+  phone: string | null;
+  notes: string | null;
+  created_at: string;
+  last_measurement?: {
+    template_name: string;
+    taken_at: string;
+    fields_count: number;
+  } | null;
+}
+
 export interface DashboardStats {
   client_count: number;
   template_count: number;
   measurement_count: number;
   last_activity: string | null;
+  recent_clients: DashboardClientItem[];
 }
 
 export interface DashboardStatsResponse {
@@ -15,9 +29,8 @@ export interface DashboardStatsResponse {
 }
 
 /**
- * Returns aggregate statistics for the authenticated tailor's dashboard.
- * Delegates to the tailor_dashboard_stats() security-definer RPC so that
- * counts are computed server-side without exposing cross-tenant data.
+ * Returns aggregate statistics and recent client records for the authenticated tailor's dashboard.
+ * Prioritizes fast client search & fitting lookup over creation.
  */
 export async function getDashboardStats(): Promise<DashboardStatsResponse> {
   const supabase = await createClient();
@@ -30,33 +43,63 @@ export async function getDashboardStats(): Promise<DashboardStatsResponse> {
     return { data: null, error: 'Unauthorized' };
   }
 
-  const { data, error } = await supabase.rpc('tailor_dashboard_stats');
+  // 1. Fetch aggregate statistics via security definer RPC
+  const { data: statsData, error: statsError } = await supabase.rpc('tailor_dashboard_stats');
 
-  if (error) {
-    console.error('[Supabase tailor_dashboard_stats RPC error]:', error);
-    return { data: null, error: `Failed to load dashboard statistics: ${error.message}` };
+  if (statsError) {
+    console.error('[Supabase tailor_dashboard_stats RPC error]:', statsError);
+    return { data: null, error: `Failed to load dashboard statistics: ${statsError.message}` };
   }
 
-  // The RPC returns a single row (or zero rows for unauthenticated callers).
-  const row = Array.isArray(data) ? data[0] : data;
+  const row = Array.isArray(statsData) ? statsData[0] : statsData;
 
-  if (!row) {
-    return {
-      data: {
-        client_count: 0,
-        template_count: 0,
-        measurement_count: 0,
-        last_activity: null,
-      },
-    };
+  // 2. Fetch clients with their recent measurements for immediate lookup
+  const { data: clientsData, error: clientsError } = await supabase
+    .from('clients')
+    .select('id, name, phone, notes, created_at')
+    .eq('tailor_id', user.id)
+    .order('updated_at', { ascending: false })
+    .limit(20);
+
+  // 3. Fetch recent measurements to associate with client lookup
+  const { data: measurementsData } = await supabase
+    .from('measurements')
+    .select('client_id, template_name_snapshot, fields_snapshot, taken_at')
+    .eq('tailor_id', user.id)
+    .order('taken_at', { ascending: false })
+    .limit(50);
+
+  const measurementMap = new Map<string, { template_name: string; taken_at: string; fields_count: number }>();
+
+  if (measurementsData) {
+    for (const m of measurementsData) {
+      if (!measurementMap.has(m.client_id)) {
+        const fields = Array.isArray(m.fields_snapshot) ? m.fields_snapshot : [];
+        measurementMap.set(m.client_id, {
+          template_name: m.template_name_snapshot || 'Custom Garment',
+          taken_at: m.taken_at,
+          fields_count: fields.length,
+        });
+      }
+    }
   }
+
+  const recent_clients: DashboardClientItem[] = (clientsData || []).map((c) => ({
+    id: c.id,
+    name: c.name,
+    phone: c.phone,
+    notes: c.notes,
+    created_at: c.created_at,
+    last_measurement: measurementMap.get(c.id) || null,
+  }));
 
   return {
     data: {
-      client_count: Number(row.client_count ?? 0),
-      template_count: Number(row.template_count ?? 0),
-      measurement_count: Number(row.measurement_count ?? 0),
-      last_activity: row.last_activity ?? null,
+      client_count: Number(row?.client_count ?? 0),
+      template_count: Number(row?.template_count ?? 0),
+      measurement_count: Number(row?.measurement_count ?? 0),
+      last_activity: row?.last_activity ?? null,
+      recent_clients,
     },
   };
 }

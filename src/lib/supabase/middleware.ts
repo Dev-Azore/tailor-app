@@ -92,6 +92,14 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
+
+    // Prevent stale browser cache on authenticated app/admin views
+    if (isAppRoute || isAdminRoute) {
+      supabaseResponse.headers.set(
+        'Cache-Control',
+        'no-store, no-cache, max-age=0, must-revalidate'
+      );
+    }
   }
 
   return supabaseResponse;

@@ -16,56 +16,68 @@ import {
 import { createTemplate, updateTemplate } from './actions';
 import { TemplateFieldInput } from '@/lib/validation/template';
 
-// Curated preset templates to speed up mobile entry
+// Curated preset templates tailored for Nigerian & contemporary tailoring
 const PRESETS = [
   {
-    name: 'Men’s Shirt',
+    name: 'Royal Kaftan (Male)',
+    fields: [
+      { field_name: 'Tsawon Riga (Shirt Length)', unit: 'in' },
+      { field_name: 'Fadin Kafada (Shoulder)', unit: 'in' },
+      { field_name: 'Kirji (Chest)', unit: 'in' },
+      { field_name: 'Tsawon Hannu (Sleeve)', unit: 'in' },
+      { field_name: 'Kugun Wando (Trouser Waist)', unit: 'in' },
+      { field_name: 'Tsawon Wando (Trouser Length)', unit: 'in' },
+      { field_name: 'Cinye (Thigh Width)', unit: 'in' },
+      { field_name: 'Kafa (Ankle Width)', unit: 'in' },
+    ],
+  },
+  {
+    name: 'Babban Riga 3-Piece',
+    fields: [
+      { field_name: 'Tsawon Robe (Robe Length)', unit: 'in' },
+      { field_name: 'Fadin Hannu (Wing Span)', unit: 'in' },
+      { field_name: 'Kirjin Buba (Inner Chest)', unit: 'in' },
+      { field_name: 'Tsawon Buba (Inner Length)', unit: 'in' },
+      { field_name: 'Wuyan Riga (Neck)', unit: 'in' },
+      { field_name: 'Tsawon Wando (Trouser Length)', unit: 'in' },
+      { field_name: 'Kafan Wando (Ankle)', unit: 'in' },
+    ],
+  },
+  {
+    name: 'Executive Senator Wear',
+    fields: [
+      { field_name: 'Top Length (Riga)', unit: 'in' },
+      { field_name: 'Shoulder (Kafada)', unit: 'in' },
+      { field_name: 'Chest (Kirji)', unit: 'in' },
+      { field_name: 'Sleeve (Hannu)', unit: 'in' },
+      { field_name: 'Trouser Waist (Kugu)', unit: 'in' },
+      { field_name: 'Trouser Length (Wando)', unit: 'in' },
+      { field_name: 'Trouser Thigh (Cinye)', unit: 'in' },
+    ],
+  },
+  {
+    name: 'Female Gown / Abaya',
+    fields: [
+      { field_name: 'Bust (Kirji)', unit: 'in' },
+      { field_name: 'Underbust (Karkashin Kirji)', unit: 'in' },
+      { field_name: 'Waist (Kunkuru)', unit: 'in' },
+      { field_name: 'Hip (Kugu)', unit: 'in' },
+      { field_name: 'Shoulder to Floor / Gown Length', unit: 'in' },
+      { field_name: 'Skirt Length (Tsawon Siket)', unit: 'in' },
+      { field_name: 'Sleeve Length (Hannu)', unit: 'in' },
+    ],
+  },
+  {
+    name: 'Men’s Shirt & Trousers',
     fields: [
       { field_name: 'Neck / Collar', unit: 'in' },
-      { field_name: 'Chest / Bust', unit: 'in' },
+      { field_name: 'Chest', unit: 'in' },
       { field_name: 'Shoulder Width', unit: 'in' },
       { field_name: 'Sleeve Length', unit: 'in' },
-      { field_name: 'Bicep / Arm', unit: 'in' },
       { field_name: 'Shirt Length', unit: 'in' },
-      { field_name: 'Wrist / Cuff', unit: 'in' },
-    ],
-  },
-  {
-    name: 'Trousers / Pants',
-    fields: [
-      { field_name: 'Waist', unit: 'in' },
-      { field_name: 'Hip', unit: 'in' },
-      { field_name: 'Thigh Circumference', unit: 'in' },
-      { field_name: 'Knee', unit: 'in' },
-      { field_name: 'Inseam Length', unit: 'in' },
-      { field_name: 'Outseam / Total Length', unit: 'in' },
-      { field_name: 'Ankle / Bottom Opening', unit: 'in' },
-    ],
-  },
-  {
-    name: 'Traditional / Kaftan / Agbada',
-    fields: [
-      { field_name: 'Chest', unit: 'in' },
-      { field_name: 'Top Length', unit: 'in' },
-      { field_name: 'Shoulder', unit: 'in' },
-      { field_name: 'Sleeve Length', unit: 'in' },
-      { field_name: 'Neck', unit: 'in' },
       { field_name: 'Trouser Waist', unit: 'in' },
-      { field_name: 'Trouser Length', unit: 'in' },
-      { field_name: 'Trouser Thigh', unit: 'in' },
-      { field_name: 'Ankle Width', unit: 'in' },
-    ],
-  },
-  {
-    name: 'Women’s Dress / Gown',
-    fields: [
-      { field_name: 'Bust', unit: 'in' },
-      { field_name: 'Underbust', unit: 'in' },
-      { field_name: 'Waist', unit: 'in' },
-      { field_name: 'Hip', unit: 'in' },
-      { field_name: 'Shoulder to Waist', unit: 'in' },
-      { field_name: 'Shoulder to Floor / Length', unit: 'in' },
-      { field_name: 'Sleeve Length', unit: 'in' },
+      { field_name: 'Trouser Inseam', unit: 'in' },
+      { field_name: 'Trouser Outseam', unit: 'in' },
     ],
   },
 ];
@@ -97,9 +109,10 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           order_index: idx,
         }))
       : [
-          { field_name: 'Chest / Bust', unit: 'in', order_index: 0 },
-          { field_name: 'Waist', unit: 'in', order_index: 1 },
-          { field_name: 'Length', unit: 'in', order_index: 2 },
+          { field_name: 'Tsawon Riga (Length)', unit: 'in', order_index: 0 },
+          { field_name: 'Kirji (Chest)', unit: 'in', order_index: 1 },
+          { field_name: 'Kafada (Shoulder)', unit: 'in', order_index: 2 },
+          { field_name: 'Hannu (Sleeve)', unit: 'in', order_index: 3 },
         ]
   );
 
@@ -116,7 +129,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
 
   const handleRemoveField = (index: number) => {
     if (fields.length <= 1) {
-      setGeneralError('A template must contain at least one measurement field.');
+      setGeneralError('A template must contain at least one measurement point.');
       return;
     }
     setGeneralError(null);
@@ -173,7 +186,6 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
     setGeneralError(null);
     setFieldErrors({});
 
-    // Client-side quick check
     if (!name.trim()) {
       setFieldErrors({ name: ['Template name is required'] });
       return;
@@ -181,7 +193,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
 
     const emptyFieldIndex = fields.findIndex((f) => !f.field_name.trim());
     if (emptyFieldIndex !== -1) {
-      setGeneralError(`Field #${emptyFieldIndex + 1} is missing a name.`);
+      setGeneralError(`Measurement point #${emptyFieldIndex + 1} is missing a name.`);
       return;
     }
 
@@ -235,9 +247,9 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-5 max-w-2xl mx-auto animate-fade-in-up">
       {generalError && (
-        <div className="flex items-start gap-3 p-3.5 bg-red-950/50 border border-red-800/80 rounded-xl text-red-200 text-sm">
+        <div className="flex items-start gap-3 p-3.5 bg-red-950/40 border border-red-800/80 rounded-2xl text-red-200 text-sm">
           <AlertCircle className="w-5 h-5 shrink-0 text-red-400 mt-0.5" />
           <span>{generalError}</span>
         </div>
@@ -245,10 +257,10 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
 
       {/* Preset Quick Loader */}
       {!isEditing && (
-        <div className="p-4 bg-slate-900/90 border border-slate-800/80 rounded-2xl space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-semibold text-lime-400 uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Quick Start Templates</span>
+        <div className="p-4 sm:p-5 bg-[#071A34] border border-[#2e7d32]/35 rounded-2xl space-y-2.5">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#81c784] uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-[#2e7d32]" />
+            <span>Popular Traditional Presets</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             {PRESETS.map((preset) => (
@@ -256,7 +268,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                 key={preset.name}
                 type="button"
                 onClick={() => handleApplyPreset(preset)}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700/60 rounded-lg text-xs font-medium text-slate-200 transition-all cursor-pointer"
+                className="px-3 py-1.5 bg-[#040e1e] hover:bg-[#0B2545] border border-[#0B2545] hover:border-[#2e7d32]/50 rounded-xl text-xs font-bold text-slate-200 hover:text-white transition-all cursor-pointer"
               >
                 + {preset.name}
               </button>
@@ -266,20 +278,20 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
       )}
 
       {/* Template Name Input */}
-      <div className="p-4 sm:p-5 bg-slate-900/90 border border-slate-800/80 rounded-2xl space-y-2">
+      <div className="p-4 sm:p-5 bg-[#071A34] border border-[#0B2545] rounded-2xl space-y-2">
         <label
           htmlFor="template-name"
-          className="block text-sm font-medium text-slate-200"
+          className="block text-xs font-bold uppercase tracking-wider text-slate-300"
         >
-          Template Name <span className="text-lime-400">*</span>
+          Template Name <span className="text-[#81c784]">*</span>
         </label>
         <input
           id="template-name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g., Men’s 3-Piece Suit, Kaftan, Evening Gown"
-          className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-lime-400/50 focus:border-lime-400 text-base"
+          placeholder="e.g., Royal Kaftan, Senator Suit, Babban Riga, Female Gown"
+          className="w-full px-3.5 py-2.5 bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-xl text-white placeholder-slate-500 focus:outline-none text-base font-bold transition"
           disabled={isSubmitting}
         />
         {fieldErrors.name && (
@@ -287,33 +299,33 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
         )}
       </div>
 
-      {/* Measurement Fields */}
+      {/* Measurement Fields List */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <div>
-            <h2 className="text-base font-semibold text-slate-100 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-lime-400" />
-              Measurement Fields ({fields.length})
+            <h2 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#81c784]" />
+              <span>Measurement Points ({fields.length})</span>
             </h2>
             <p className="text-xs text-slate-400">
-              Define the measurements taken for this garment
+              Set the exact body points to measure for this style.
             </p>
           </div>
           <button
             type="button"
             onClick={handleAddField}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-lime-400/10 hover:bg-lime-400/20 text-lime-300 border border-lime-400/30 rounded-lg text-xs font-medium transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#2e7d32]/20 hover:bg-[#2e7d32]/30 text-[#81c784] border border-[#2e7d32]/40 rounded-xl text-xs font-bold transition cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
-            Add Field
+            <span>Add Point</span>
           </button>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {fields.map((field, index) => (
             <div
               key={index}
-              className="p-3 sm:p-4 bg-slate-900/90 border border-slate-800 rounded-xl flex items-center gap-2 sm:gap-3 transition-colors hover:border-slate-700"
+              className="p-3 bg-[#071A34] border border-[#0B2545] hover:border-[#2e7d32]/40 rounded-xl flex items-center gap-2 sm:gap-3 transition-colors"
             >
               {/* Order Number & Reorder */}
               <div className="flex flex-col items-center gap-0.5 text-slate-500">
@@ -322,11 +334,11 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                   onClick={() => handleMoveUp(index)}
                   disabled={index === 0 || isSubmitting}
                   title="Move up"
-                  className="p-1 hover:text-slate-200 disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
+                  className="p-1 hover:text-white disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
                 >
                   <ArrowUp className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-[10px] font-mono font-bold text-slate-400">
+                <span className="text-[10px] font-mono font-bold text-[#81c784]">
                   {index + 1}
                 </span>
                 <button
@@ -334,7 +346,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                   onClick={() => handleMoveDown(index)}
                   disabled={index === fields.length - 1 || isSubmitting}
                   title="Move down"
-                  className="p-1 hover:text-slate-200 disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
+                  className="p-1 hover:text-white disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
                 >
                   <ArrowDown className="w-3.5 h-3.5" />
                 </button>
@@ -348,8 +360,8 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                   onChange={(e) =>
                     handleFieldChange(index, 'field_name', e.target.value)
                   }
-                  placeholder={`Field name (e.g., Chest, Waist)`}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+                  placeholder={`Measurement point name (e.g., Tsawon Riga, Hannu)`}
+                  className="w-full px-3 py-2 bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none font-medium"
                   disabled={isSubmitting}
                 />
               </div>
@@ -361,7 +373,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                   onChange={(e) =>
                     handleFieldChange(index, 'unit', e.target.value)
                   }
-                  className="w-full px-2.5 py-2 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-lime-400 focus:border-lime-400"
+                  className="w-full px-2.5 py-2 bg-[#040e1e] border border-[#0B2545] focus:border-[#2e7d32] rounded-lg text-xs font-bold text-[#81c784] focus:outline-none"
                   disabled={isSubmitting}
                 >
                   <option value="in">Inches (in)</option>
@@ -378,7 +390,7 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
                 onClick={() => handleRemoveField(index)}
                 disabled={fields.length <= 1 || isSubmitting}
                 title="Remove field"
-                className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
+                className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition disabled:opacity-20 disabled:hover:text-slate-500 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -390,10 +402,10 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           type="button"
           onClick={handleAddField}
           disabled={isSubmitting}
-          className="w-full py-2.5 border-2 border-dashed border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition cursor-pointer"
+          className="w-full py-2.5 border-2 border-dashed border-[#0B2545] hover:border-[#2e7d32]/50 text-slate-400 hover:text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          Add Another Field
+          <span>Add Another Measurement Point</span>
         </button>
       </div>
 
@@ -403,24 +415,24 @@ export function TemplateForm({ initialData }: TemplateFormProps) {
           type="button"
           onClick={() => router.back()}
           disabled={isSubmitting}
-          className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 rounded-xl text-sm font-medium transition cursor-pointer"
+          className="px-4 py-2.5 bg-[#071A34] hover:bg-[#0B2545] text-slate-300 rounded-xl text-sm font-medium border border-[#0B2545] transition cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex items-center gap-2 px-5 py-2.5 bg-lime-400 hover:bg-lime-300 active:scale-95 text-brand-900 rounded-xl text-sm font-semibold shadow-lg shadow-lime-400/20 transition disabled:opacity-50 cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#2e7d32] hover:bg-[#1b5e20] text-white rounded-xl text-sm font-bold shadow-lg shadow-[#2e7d32]/25 transition disabled:opacity-50 cursor-pointer"
         >
           {isSubmitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Saving...
+              <span>Saving...</span>
             </>
           ) : (
             <>
               <Save className="w-4 h-4" />
-              {isEditing ? 'Save Changes' : 'Create Template'}
+              <span>{isEditing ? 'Save Changes' : 'Create Template'}</span>
             </>
           )}
         </button>

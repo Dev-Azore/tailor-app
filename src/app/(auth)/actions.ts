@@ -34,7 +34,7 @@ export async function loginWithPassword(
     return { errors: parsed.error.flatten().fieldErrors as Record<string, string[]> };
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: signInData, error } = await supabase.auth.signInWithPassword({
     email: parsed.data.email,
     password: parsed.data.password,
   });
@@ -44,7 +44,28 @@ export async function loginWithPassword(
     return { error: `Login failed: ${error.message}` };
   }
 
-  redirect('/dashboard');
+  // Determine destination based on user role and status
+  let destination = '/dashboard';
+  const userId = signInData.user?.id;
+
+  if (userId) {
+    const { data: profile } = await supabase
+      .from('users')
+      .select('role, status')
+      .eq('id', userId)
+      .single();
+
+    if (profile?.status === 'suspended') {
+      await supabase.auth.signOut();
+      return { error: 'Your account is suspended. Please contact support.' };
+    }
+
+    if (profile?.role === 'admin') {
+      destination = '/admin';
+    }
+  }
+
+  redirect(destination);
 }
 
 // ---------------------------------------------------------------------------

@@ -6,6 +6,8 @@ import { BottomNav } from '@/components/layout/BottomNav';
 // Tailor-facing routes use Client Components (CSR) per spec §3.6.
 // This layout is a Server Component that provides auth context to children,
 // then children themselves are 'use client' components.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -55,7 +57,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const profilePlan = profile?.plan ?? 'free';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#040e1e] text-slate-100 flex flex-col selection:bg-[#2e7d32] selection:text-white">
       <AppHeader name={profileName} plan={profilePlan} />
       <main className="flex-1 pb-24 max-w-2xl w-full mx-auto px-4 pt-4">
         {children}
