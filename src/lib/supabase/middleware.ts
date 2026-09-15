@@ -39,7 +39,8 @@ export async function updateSession(request: NextRequest) {
     path.startsWith('/login') ||
     path.startsWith('/register') ||
     path.startsWith('/admin-login'); // admin entry point is a public auth page
-  const isPublicRoute = isAuthRoute || path.startsWith('/suspended');
+  const isLandingRoute = path === '/';
+  const isPublicRoute = isAuthRoute || isLandingRoute || path.startsWith('/suspended');
   const isAppRoute =
     path.startsWith('/dashboard') ||
     path.startsWith('/clients') ||

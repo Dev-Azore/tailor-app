@@ -1,0 +1,42 @@
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'outline' | 'ghost' | 'secondary' | 'glow';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          'inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+          // Variant styling
+          variant === 'default' &&
+            'bg-lime-400 text-brand-950 hover:bg-lime-300 shadow-lg shadow-lime-400/20 font-bold',
+          variant === 'glow' &&
+            'bg-gradient-to-r from-lime-400 to-lime-300 text-brand-950 font-bold shadow-xl shadow-lime-400/30 hover:shadow-lime-400/50 hover:scale-[1.02]',
+          variant === 'outline' &&
+            'border border-slate-700 bg-slate-900/50 text-slate-100 hover:bg-slate-800 hover:border-slate-600',
+          variant === 'secondary' &&
+            'bg-slate-800 text-slate-100 hover:bg-slate-700 border border-slate-700/50',
+          variant === 'ghost' &&
+            'text-slate-300 hover:text-white hover:bg-slate-800/60',
+          // Size styling
+          size === 'default' && 'h-11 px-5 py-2.5',
+          size === 'sm' && 'h-9 px-3 text-xs',
+          size === 'lg' && 'h-13 px-8 text-base rounded-2xl',
+          size === 'icon' && 'h-10 w-10 p-0',
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = 'Button';
+
+export { Button };
